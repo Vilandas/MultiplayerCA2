@@ -14,7 +14,7 @@
 const sf::Time Application::kTimePerFrame = sf::seconds(1.f / 60.f);
 
 Application::Application()
-:m_window(sf::VideoMode(1024, 768), "Network", sf::Style::Close)
+:m_window(sf::VideoMode(1920, 1080), "Network", sf::Style::Close)
 , m_key_binding_1(1)
 , m_key_binding_2(2)
 , m_stack(State::Context(m_window, m_textures, m_fonts, m_music, m_sounds, m_key_binding_1, m_key_binding_2))
@@ -23,7 +23,7 @@ Application::Application()
 	m_window.setKeyRepeatEnabled(false);
 
 	m_fonts.Load(Fonts::Main, "Media/Fonts/Sansation.ttf");
-	m_textures.Load(Textures::kTitleScreen, "Media/Textures/TitleScreen.png");
+	m_textures.Load(Textures::kTitleScreen, "Media/Textures/RockBallMenu.png");
 	m_textures.Load(Textures::kButtons, "Media/Textures/Buttons.png");
 
 	m_statistics_text.setFont(m_fonts.Get(Fonts::Main));
