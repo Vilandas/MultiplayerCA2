@@ -46,7 +46,7 @@ void World::SetWorldScrollCompensation(float compensation)
 void World::Update(sf::Time dt)
 {
 	//Scroll the world
-	m_camera.move(0, m_scrollspeed * dt.asSeconds()*m_scrollspeed_compensation);
+	//m_camera.move(0, m_scrollspeed * dt.asSeconds()*m_scrollspeed_compensation);
 
 	for (Aircraft* a : m_player_aircraft)
 	{
@@ -170,7 +170,7 @@ bool World::HasPlayerReachedEnd() const
 void World::LoadTextures()
 {
 	m_textures.Load(Textures::kEntities, "Media/Textures/Entities.png");
-	m_textures.Load(Textures::kJungle, "Media/Textures/Jungle.png");
+	m_textures.Load(Textures::KCourt, "Media/Textures/jungle.png");
 	m_textures.Load(Textures::kExplosion, "Media/Textures/Explosion.png");
 	m_textures.Load(Textures::kParticle, "Media/Textures/Particle.png");
 	m_textures.Load(Textures::kFinishLine, "Media/Textures/FinishLine.png");
@@ -188,19 +188,19 @@ void World::BuildScene()
 	}
 
 	//Prepare the background
-	sf::Texture& jungle_texture = m_textures.Get(Textures::kJungle);
+	sf::Texture& court_texture = m_textures.Get(Textures::KCourt);
 	//sf::IntRect textureRect(m_world_bounds);
 	//Tile the texture to cover our world
-	jungle_texture.setRepeated(true);
+	court_texture.setRepeated(true);
 
 	float view_height = m_camera.getSize().y;
 	sf::IntRect texture_rect(m_world_bounds);
 	texture_rect.height += static_cast<int>(view_height);
 
-	//Add the background sprite to our scene
-	std::unique_ptr<SpriteNode> jungle_sprite(new SpriteNode(jungle_texture, texture_rect));
-	jungle_sprite->setPosition(m_world_bounds.left, m_world_bounds.top - view_height);
-	m_scene_layers[static_cast<int>(Layers::kBackground)]->AttachChild(std::move(jungle_sprite));
+	std::unique_ptr<SpriteNode> court_sprite(new SpriteNode(court_texture, texture_rect));
+	court_sprite->setPosition(m_world_bounds.left, m_world_bounds.top);
+	//floor_sprite->setPosition(-500, 0);
+	m_scene_layers[static_cast<int>(Layers::kBackground)]->AttachChild(std::move(court_sprite));
 
 	// Add the finish line to the scene
 	sf::Texture& finish_texture = m_textures.Get(Textures::kFinishLine);
