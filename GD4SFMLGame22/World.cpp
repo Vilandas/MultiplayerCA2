@@ -38,10 +38,10 @@ World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sou
 	m_camera.setCenter(m_spawn_position);
 }
 
-void World::SetWorldScrollCompensation(float compensation)
-{
-	m_scrollspeed_compensation = compensation;
-}
+//void World::SetWorldScrollCompensation(float compensation)
+//{
+//	m_scrollspeed_compensation = compensation;
+//}
 
 void World::Update(sf::Time dt)
 {
@@ -170,7 +170,7 @@ bool World::HasPlayerReachedEnd() const
 void World::LoadTextures()
 {
 	m_textures.Load(Textures::kEntities, "Media/Textures/Entities.png");
-	m_textures.Load(Textures::KCourt, "Media/Textures/jungle.png");
+	m_textures.Load(Textures::KCourt, "Media/Textures/court.png");
 	m_textures.Load(Textures::kExplosion, "Media/Textures/Explosion.png");
 	m_textures.Load(Textures::kParticle, "Media/Textures/Particle.png");
 	m_textures.Load(Textures::kFinishLine, "Media/Textures/FinishLine.png");
