@@ -20,7 +20,7 @@ World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sou
 	, m_sounds(sounds)
 	, m_scenegraph()
 	, m_scene_layers()
-	, m_world_bounds(0.f, 0.f, m_camera.getSize().x, 5000.f)
+	, m_world_bounds(0.f, 0.f, 1920, 1088)
 	, m_spawn_position(m_camera.getSize().x/2.f, m_world_bounds.height - m_camera.getSize().y /2.f)
 	, m_scrollspeed(-50.f)
 	, m_scrollspeed_compensation(1.f)
@@ -81,19 +81,19 @@ void World::Update(sf::Time dt)
 
 void World::Draw()
 {
-	if(PostEffect::IsSupported())
-	{
-		m_scene_texture.clear();
-		m_scene_texture.setView(m_camera);
-		m_scene_texture.draw(m_scenegraph);
-		m_scene_texture.display();
-		m_bloom_effect.Apply(m_scene_texture, m_target);
-	}
-	else
-	{
-		m_target.setView(m_camera);
-		m_target.draw(m_scenegraph);
-	}
+	//if(PostEffect::IsSupported())
+	//{
+	//	m_scene_texture.clear();
+	//	m_scene_texture.setView(m_camera);
+	//	m_scene_texture.draw(m_scenegraph);
+	//	m_scene_texture.display();
+	//	m_bloom_effect.Apply(m_scene_texture, m_target);
+	//}
+	//else
+
+	m_target.setView(m_camera);
+	m_target.draw(m_scenegraph);
+	
 }
 
 Aircraft* World::GetAircraft(int identifier) const
@@ -263,7 +263,7 @@ void World::AdaptPlayerVelocity()
 			aircraft->SetVelocity(velocity / std::sqrt(2.f));
 		}
 		//Add scrolling velocity
-		aircraft->Accelerate(0.f, m_scrollspeed);
+		//aircraft->Accelerate(0.f, m_scrollspeed);
 	}
 }
 
@@ -304,10 +304,13 @@ void World::SpawnEnemies()
 	}
 }
 
+
 void World::AddEnemy(AircraftType type, float relX, float relY)
 {
+	/*
 	SpawnPoint spawn(type, m_spawn_position.x + relX, m_spawn_position.y - relY);
 	m_enemy_spawn_points.emplace_back(spawn);
+	*/
 }
 
 void World::AddEnemies()

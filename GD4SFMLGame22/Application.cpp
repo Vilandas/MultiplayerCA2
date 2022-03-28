@@ -23,7 +23,7 @@ Application::Application()
 	m_window.setKeyRepeatEnabled(false);
 
 	m_fonts.Load(Fonts::Main, "Media/Fonts/Sansation.ttf");
-	m_textures.Load(Textures::kTitleScreen, "Media/Textures/RockBallMenu.png");
+	m_textures.Load(Textures::kTitleScreen, "Media/Textures/Menu.png");
 	m_textures.Load(Textures::kButtons, "Media/Textures/Buttons.png");
 
 	m_statistics_text.setFont(m_fonts.Get(Fonts::Main));

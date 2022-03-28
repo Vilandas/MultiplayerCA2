@@ -40,6 +40,7 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 , m_fire_rate(1)
 , m_spread_level(1)
 , m_missile_ammo(2)
+, m_has_ball(false)
 , m_health_display(nullptr)
 , m_missile_display(nullptr)
 , m_travelled_distance(0.f)
@@ -319,9 +320,17 @@ bool Aircraft::IsAllied() const
 //TODO Do enemies need a different offset as they are flying down the screen?
 void Aircraft::CreateBullets(SceneNode& node, const TextureHolder& textures) const
 {
+
+
 	ProjectileType type = IsAllied() ? ProjectileType::kAlliedBullet : ProjectileType::kEnemyBullet;
-	switch(m_spread_level)
-	{
+
+	if (m_has_ball) {
+
+
+
+
+		switch (m_spread_level)
+		{
 		case 1:
 			CreateProjectile(node, type, 0.0f, 0.5f, textures);
 			break;
@@ -335,8 +344,9 @@ void Aircraft::CreateBullets(SceneNode& node, const TextureHolder& textures) con
 			CreateProjectile(node, type, 0.5f, 0.5f, textures);
 			break;
 
-	}
+		}
 
+	}
 }
 
 void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_offset, float y_offset,
@@ -344,7 +354,19 @@ void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_of
 {
 	std::unique_ptr<Projectile> projectile(new Projectile(type, textures));
 	sf::Vector2f offset(x_offset * m_sprite.getGlobalBounds().width, y_offset * m_sprite.getGlobalBounds().height);
-	sf::Vector2f velocity(0, projectile->GetMaxSpeed());
+	//for left siude team
+	
+
+	
+	sf::Vector2f velocity(-projectile->GetMaxSpeed(), 0);
+
+
+	if (type == ProjectileType::kEnemyBullet) {
+		sf::Vector2f velocity(projectile->GetMaxSpeed(), 0);
+	}
+
+
+
 
 	float sign = IsAllied() ? -1.f : +1.f;
 	projectile->setPosition(GetWorldPosition() + offset * sign);
