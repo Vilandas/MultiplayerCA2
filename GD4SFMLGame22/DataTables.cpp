@@ -13,14 +13,18 @@ std::vector<AircraftData> InitializeAircraftData()
 	data[static_cast<int>(AircraftType::kEagle)].m_speed = 200.f;
 	data[static_cast<int>(AircraftType::kEagle)].m_fire_interval = sf::seconds(1);
 	data[static_cast<int>(AircraftType::kEagle)].m_texture = Textures::kEntities;
-	data[static_cast<int>(AircraftType::kEagle)].m_texture_rect = sf::IntRect(0, 0, 48, 64);
+	data[static_cast<int>(AircraftType::kEagle)].m_walk_texture_rect = sf::IntRect(0, 0, 35, 35);
+	data[static_cast<int>(AircraftType::kEagle)].m_throw_texture_rect = sf::IntRect(0, 0, 32, 32);
 	data[static_cast<int>(AircraftType::kEagle)].m_has_roll_animation = true;
+	data[static_cast<int>(AircraftType::kEagle)].m_walk_animation_frames = 6;
+	data[static_cast<int>(AircraftType::kEagle)].m_throw_animation_frames = 4;
 
 	data[static_cast<int>(AircraftType::kRaptor)].m_hitpoints = 20;
 	data[static_cast<int>(AircraftType::kRaptor)].m_speed = 80.f;
 	data[static_cast<int>(AircraftType::kRaptor)].m_fire_interval = sf::Time::Zero;
 	data[static_cast<int>(AircraftType::kRaptor)].m_texture = Textures::kEntities;
-	data[static_cast<int>(AircraftType::kRaptor)].m_texture_rect = sf::IntRect(144, 0, 84, 64);
+	data[static_cast<int>(AircraftType::kRaptor)].m_walk_texture_rect = sf::IntRect(144, 0, 84, 64);
+	data[static_cast<int>(AircraftType::kRaptor)].m_throw_texture_rect = sf::IntRect(144, 0, 84, 64);
 	//AI
 	data[static_cast<int>(AircraftType::kRaptor)].m_directions.emplace_back(Direction(+45.f, 80.f));
 	data[static_cast<int>(AircraftType::kRaptor)].m_directions.emplace_back(Direction(-45.f, 160.f));
@@ -31,7 +35,8 @@ std::vector<AircraftData> InitializeAircraftData()
 	data[static_cast<int>(AircraftType::kAvenger)].m_speed = 50.f;
 	data[static_cast<int>(AircraftType::kAvenger)].m_fire_interval = sf::seconds(2);
 	data[static_cast<int>(AircraftType::kAvenger)].m_texture = Textures::kEntities;
-	data[static_cast<int>(AircraftType::kAvenger)].m_texture_rect = sf::IntRect(228, 0, 60, 59);
+	data[static_cast<int>(AircraftType::kAvenger)].m_walk_texture_rect = sf::IntRect(228, 0, 60, 59);
+	data[static_cast<int>(AircraftType::kAvenger)].m_walk_texture_rect = sf::IntRect(228, 0, 60, 59);
 	//AI
 	data[static_cast<int>(AircraftType::kAvenger)].m_directions.emplace_back(Direction(+45.f, 50.f));
 	data[static_cast<int>(AircraftType::kAvenger)].m_directions.emplace_back(Direction(0.f, 50.f));

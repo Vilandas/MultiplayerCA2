@@ -123,7 +123,7 @@ Aircraft* World::AddAircraft(int identifier)
 	std::unique_ptr<Aircraft> player(new Aircraft(AircraftType::kEagle, m_textures, m_fonts));
 	player->setPosition(m_camera.getCenter());
 	player->SetIdentifier(identifier);
-
+	player->setScale(sf::Vector2f(3, 3));
 	m_player_aircraft.emplace_back(player.get());
 	m_scene_layers[static_cast<int>(Layers::kUpperAir)]->AttachChild(std::move(player));
 	return m_player_aircraft.back();
@@ -169,7 +169,7 @@ bool World::HasPlayerReachedEnd() const
 
 void World::LoadTextures()
 {
-	m_textures.Load(Textures::kEntities, "Media/Textures/Entities.png");
+	m_textures.Load(Textures::kEntities, "Media/Textures/Dodgeball_Spritesheet.png");
 	m_textures.Load(Textures::KCourt, "Media/Textures/court.png");
 	m_textures.Load(Textures::kExplosion, "Media/Textures/Explosion.png");
 	m_textures.Load(Textures::kParticle, "Media/Textures/Particle.png");

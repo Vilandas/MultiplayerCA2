@@ -16,6 +16,8 @@
 #include "NetworkNode.hpp"
 
 
+
+
 namespace
 {
 	const std::vector<AircraftData> Table = InitializeAircraftData();
@@ -25,7 +27,7 @@ namespace
 Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontHolder& fonts)
 : Entity(Table[static_cast<int>(type)].m_hitpoints)
 , m_type(type)
-, m_sprite(textures.Get(Table[static_cast<int>(type)].m_texture), Table[static_cast<int>(type)].m_texture_rect)
+, m_sprite(textures.Get(Table[static_cast<int>(type)].m_texture), Table[static_cast<int>(type)].m_walk_texture_rect)
 , m_explosion(textures.Get(Textures::kExplosion))
 , m_is_firing(false)
 , m_is_launching_missile(false)
@@ -47,6 +49,9 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 	m_explosion.SetFrameSize(sf::Vector2i(256, 256));
 	m_explosion.SetNumFrames(16);
 	m_explosion.SetDuration(sf::seconds(1));
+	
+	m_current_walk_frame = 0;
+	m_current_shoot_frame = 0;
 
 
 	Utility::CentreOrigin(m_sprite);
@@ -386,16 +391,30 @@ void Aircraft::UpdateRollAnimation()
 {
 	if (Table[static_cast<int>(m_type)].m_has_roll_animation)
 	{
-		sf::IntRect textureRect = Table[static_cast<int>(m_type)].m_texture_rect;
+		sf::IntRect textureRect = Table[static_cast<int>(m_type)].m_walk_texture_rect;
+		if (m_is_firing == false && GetVelocity().x < 0.0f || GetVelocity().x > 0.0f || GetVelocity().y < 0.0f || GetVelocity().y > 0.0f) 
+		{
+			textureRect = Table[static_cast<int>(m_type)].m_walk_texture_rect;
+			if (m_current_walk_frame == 0 && clock.getElapsedTime().asMilliseconds() > 100.0f)
+			{
+				time_since_last_frame = clock.getElapsedTime().asSeconds();
+				m_current_walk_frame++;
+				m_sprite.setTextureRect(textureRect);
+			}
+			else if (clock.getElapsedTime().asMilliseconds() > time_since_last_frame + 100.0f)
+			{
+				time_since_last_frame += 100.0f;
 
-		// Roll left: Texture rect offset once
-		if (GetVelocity().x < 0.f)
-			textureRect.left += textureRect.width;
-
-		// Roll right: Texture rect offset twice
-		else if (GetVelocity().x > 0.f)
-			textureRect.left += 2 * textureRect.width;
-
+				textureRect.left += m_current_walk_frame * textureRect.width;
+				m_current_walk_frame++;
+				if (m_current_walk_frame > Table[static_cast<int>(m_type)].m_walk_animation_frames - 1)
+				{
+					m_current_walk_frame = 0;
+					clock.restart();
+				}
+				m_sprite.setTextureRect(textureRect);
+			}
+		}
 		m_sprite.setTextureRect(textureRect);
 	}
 }

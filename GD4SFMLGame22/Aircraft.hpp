@@ -10,6 +10,8 @@
 #include "ProjectileType.hpp"
 #include "TextNode.hpp"
 
+#include "SFML/Graphics.hpp" //needed for clock
+#include "SFML/Graphics/Sprite.hpp"
 
 class Aircraft : public Entity
 {
@@ -52,6 +54,9 @@ private:
 
 
 private:
+	sf::Clock clock;
+	float time_since_last_frame;
+
 	AircraftType m_type;
 	sf::Sprite m_sprite;
 	Animation m_explosion;
@@ -82,5 +87,8 @@ private:
 	int m_directions_index;
 
 	int m_identifier;
+
+	int m_current_walk_frame = 0;
+	int m_current_shoot_frame = 0;
 };
 

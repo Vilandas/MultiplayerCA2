@@ -24,10 +24,14 @@ struct AircraftData
 	int m_hitpoints;
 	float m_speed;
 	Textures m_texture;
-	sf::IntRect m_texture_rect;
+	sf::IntRect m_walk_texture_rect;
+	sf::IntRect m_throw_texture_rect;
+
 	sf::Time m_fire_interval;
 	std::vector<Direction> m_directions;
 	bool m_has_roll_animation;
+	int m_throw_animation_frames;
+	int m_walk_animation_frames;
 };
 
 struct ProjectileData
