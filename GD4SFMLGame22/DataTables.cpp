@@ -13,7 +13,7 @@ std::vector<AircraftData> InitializeAircraftData()
 	data[static_cast<int>(AircraftType::kEagle)].m_speed = 200.f;
 	data[static_cast<int>(AircraftType::kEagle)].m_fire_interval = sf::seconds(1);
 	data[static_cast<int>(AircraftType::kEagle)].m_texture = Textures::kEntities;
-	data[static_cast<int>(AircraftType::kEagle)].m_walk_texture_rect = sf::IntRect(0, 0, 35, 35);
+	data[static_cast<int>(AircraftType::kEagle)].m_walk_texture_rect = sf::IntRect(0, 0, 32, 32);
 	data[static_cast<int>(AircraftType::kEagle)].m_throw_texture_rect = sf::IntRect(0, 0, 32, 32);
 	data[static_cast<int>(AircraftType::kEagle)].m_has_roll_animation = true;
 	data[static_cast<int>(AircraftType::kEagle)].m_walk_animation_frames = 6;

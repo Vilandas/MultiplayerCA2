@@ -416,6 +416,7 @@ void Aircraft::UpdateRollAnimation()
 		sf::IntRect textureRect = Table[static_cast<int>(m_type)].m_walk_texture_rect;
 		if (m_is_firing == false && GetVelocity().x < 0.0f || GetVelocity().x > 0.0f || GetVelocity().y < 0.0f || GetVelocity().y > 0.0f) 
 		{
+			std::cout << "Frame = " << m_current_walk_frame << std::endl;
 			textureRect = Table[static_cast<int>(m_type)].m_walk_texture_rect;
 			if (m_current_walk_frame == 0 && clock.getElapsedTime().asMilliseconds() > 100.0f)
 			{
@@ -423,10 +424,10 @@ void Aircraft::UpdateRollAnimation()
 				m_current_walk_frame++;
 				m_sprite.setTextureRect(textureRect);
 			}
-			else if (clock.getElapsedTime().asMilliseconds() > time_since_last_frame + 100.0f)
+			else if (clock.getElapsedTime().asMilliseconds() > time_since_last_frame + 750.0f)
 			{
-				time_since_last_frame += 100.0f;
-
+				time_since_last_frame += 750.0f;
+				
 				textureRect.left += m_current_walk_frame * textureRect.width;
 				m_current_walk_frame++;
 				if (m_current_walk_frame > Table[static_cast<int>(m_type)].m_walk_animation_frames - 1)
