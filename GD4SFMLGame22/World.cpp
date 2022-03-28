@@ -263,7 +263,7 @@ void World::AdaptPlayerVelocity()
 			aircraft->SetVelocity(velocity / std::sqrt(2.f));
 		}
 		//Add scrolling velocity
-		aircraft->Accelerate(0.f, m_scrollspeed);
+		//aircraft->Accelerate(0.f, m_scrollspeed);
 	}
 }
 
@@ -304,10 +304,13 @@ void World::SpawnEnemies()
 	}
 }
 
+
 void World::AddEnemy(AircraftType type, float relX, float relY)
 {
+	/*
 	SpawnPoint spawn(type, m_spawn_position.x + relX, m_spawn_position.y - relY);
 	m_enemy_spawn_points.emplace_back(spawn);
+	*/
 }
 
 void World::AddEnemies()

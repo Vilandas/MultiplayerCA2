@@ -72,6 +72,8 @@ private:
 	bool m_spawned_pickup;
 	bool m_pickups_enabled;
 
+	bool m_has_ball;
+
 
 	unsigned int m_fire_rate;
 	unsigned int m_spread_level;
