@@ -41,7 +41,9 @@ public:
 	void Remove() override;
 	void PlayLocalSound(CommandQueue& commands, SoundEffect effect);
 
-
+	void PickUpBall();
+	bool HasBall();
+	
 private:
 	void DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
 	void UpdateCurrent(sf::Time dt, CommandQueue& commands) override;

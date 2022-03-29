@@ -264,7 +264,7 @@ float Aircraft::GetMaxSpeed() const
 void Aircraft::Fire()
 {
 	//Only ships with a non-zero fire interval fire
-	if(Table[static_cast<int>(m_type)].m_fire_interval != sf::Time::Zero)
+	if(Table[static_cast<int>(m_type)].m_fire_interval != sf::Time::Zero && m_has_ball == true)
 	{
 		m_is_firing = true;
 	}
@@ -300,6 +300,8 @@ void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 		//Wait, can't fire yet
 		m_fire_countdown -= dt;
 		m_is_firing = false;
+		std::cout << "Ball Gone " << std::endl;
+		m_has_ball = false;
 	}
 	//Missile launch
 	if(m_is_launching_missile)
@@ -308,7 +310,6 @@ void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 		commands.Push(m_missile_command);
 		m_is_launching_missile = false;
 	}
-
 }
 
 bool Aircraft::IsAllied() const
@@ -419,7 +420,6 @@ void Aircraft::UpdateRollAnimation()
 		sf::IntRect textureRect = Table[static_cast<int>(m_type)].m_walk_texture_rect;
 		if (m_is_firing == false && GetVelocity().x < 0.0f || GetVelocity().x > 0.0f || GetVelocity().y < 0.0f || GetVelocity().y > 0.0f) 
 		{ 
-			std::cout << "Frame = " << m_current_walk_frame << std::endl;
 			textureRect = Table[static_cast<int>(m_type)].m_walk_texture_rect;
 			if (m_current_walk_frame == 0 && clock.getElapsedTime().asMilliseconds() > 100.0f)
 			{
@@ -458,6 +458,16 @@ void Aircraft::PlayLocalSound(CommandQueue& commands, SoundEffect effect)
 	});
 
 	commands.Push(command);
+}
+
+void Aircraft::PickUpBall()
+{
+	m_has_ball = true;
+}
+
+bool Aircraft::HasBall()
+{
+	return m_has_ball;
 }
 
 

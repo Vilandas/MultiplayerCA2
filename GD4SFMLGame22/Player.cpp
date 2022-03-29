@@ -34,8 +34,10 @@ struct AircraftFireTrigger
 
 	void operator() (Aircraft& aircraft, sf::Time) const
 	{
-		if (aircraft.GetIdentifier() == aircraft_id)
+		if (aircraft.GetIdentifier() == aircraft_id) 
+		{
 			aircraft.Fire();
+		}
 	}
 
 	int aircraft_id;

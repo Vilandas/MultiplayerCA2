@@ -498,10 +498,14 @@ void World::HandleCollisions()
 		{
 			auto& player = static_cast<Aircraft&>(*pair.first);
 			auto& pickup = static_cast<Pickup&>(*pair.second);
-			//Apply the pickup effect
-			pickup.Apply(player);
-			pickup.Destroy();
-			player.PlayLocalSound(m_command_queue, SoundEffect::kCollectPickup);
+			if (!player.HasBall()) 
+			{
+				pickup.Apply(player);
+				pickup.Destroy();
+				player.PlayLocalSound(m_command_queue, SoundEffect::kCollectPickup);
+				player.PickUpBall();
+				std::cout << "Player has ball =" << player.HasBall() << std::endl;
+			}
 		}
 
 		else if (MatchesCategories(pair, Category::Type::kPlayerAircraft, Category::Type::kEnemyProjectile) || MatchesCategories(pair, Category::Type::kEnemyAircraft, Category::Type::kAlliedProjectile))
