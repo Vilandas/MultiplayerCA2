@@ -69,6 +69,7 @@ private:
 	
 	void SpawnEnemies();
 	void AddEnemies();
+	void AddBalls();
 	void GuideMissiles();
 	void HandleCollisions();
 	void DestroyEntitiesOutsideView();
@@ -85,7 +86,8 @@ private:
 		float m_x;
 		float m_y;
 	};
-	
+
+
 
 private:
 	sf::RenderTarget& m_target;
@@ -105,6 +107,8 @@ private:
 	std::vector<Aircraft*> m_player_aircraft;
 	std::vector<SpawnPoint> m_enemy_spawn_points;
 	std::vector<Aircraft*>	m_active_enemies;
+
+	std::vector<SpawnPoint> m_ball_spawn_points;
 
 	BloomEffect m_bloom_effect;
 	bool m_networked_world;

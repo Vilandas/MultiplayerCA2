@@ -40,7 +40,7 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 , m_fire_rate(1)
 , m_spread_level(1)
 , m_missile_ammo(2)
-, m_has_ball(false)
+, m_has_ball(true)
 , m_health_display(nullptr)
 , m_missile_display(nullptr)
 , m_travelled_distance(0.f)
@@ -324,7 +324,7 @@ void Aircraft::CreateBullets(SceneNode& node, const TextureHolder& textures) con
 
 	ProjectileType type = IsAllied() ? ProjectileType::kAlliedBullet : ProjectileType::kEnemyBullet;
 
-	if (m_has_ball) {
+	if (m_has_ball == true) {
 
 
 
@@ -345,8 +345,9 @@ void Aircraft::CreateBullets(SceneNode& node, const TextureHolder& textures) con
 			break;
 
 		}
-
+		
 	}
+	//m_has_ball == false;
 }
 
 void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_offset, float y_offset,
@@ -358,11 +359,11 @@ void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_of
 	
 
 	
-	sf::Vector2f velocity(-projectile->GetMaxSpeed(), 0);
+	sf::Vector2f velocity(-projectile->GetMaxSpeed() * 0.8, 0);
 
 
 	if (type == ProjectileType::kEnemyBullet) {
-		sf::Vector2f velocity(projectile->GetMaxSpeed(), 0);
+		sf::Vector2f velocity(projectile->GetMaxSpeed() * 0.8, 0);
 	}
 
 
@@ -372,6 +373,8 @@ void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_of
 	projectile->setPosition(GetWorldPosition() + offset * sign);
 	projectile->SetVelocity(velocity * sign);
 	node.AttachChild(std::move(projectile));
+
+	
 }
 
 sf::FloatRect Aircraft::GetBoundingRect() const

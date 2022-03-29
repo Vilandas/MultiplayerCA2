@@ -12,6 +12,8 @@
 #include "SoundNode.hpp"
 #include "Utility.hpp"
 
+sf::Clock timer;
+
 World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sounds, bool networked)
 	: m_target(output_target)
 	, m_camera(output_target.getDefaultView())
@@ -26,6 +28,7 @@ World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sou
 	, m_scrollspeed_compensation(1.f)
 	, m_player_aircraft()
 	, m_enemy_spawn_points()
+	, m_ball_spawn_points()
 	, m_active_enemies()
 	, m_networked_world(networked)
 	, m_network_node(nullptr)
@@ -77,6 +80,8 @@ void World::Update(sf::Time dt)
 	AdaptPlayerPosition();
 
 	UpdateSounds();
+
+	AddBalls();
 }
 
 void World::Draw()
@@ -227,8 +232,9 @@ void World::BuildScene()
 		m_network_node = network_node.get();
 		m_scenegraph.AttachChild(std::move(network_node));
 	}
-
+	//m_spawn_position.x - 500;
 	AddEnemies();
+	
 }
 
 CommandQueue& World::GetCommandQueue()
@@ -311,6 +317,55 @@ void World::AddEnemy(AircraftType type, float relX, float relY)
 	SpawnPoint spawn(type, m_spawn_position.x + relX, m_spawn_position.y - relY);
 	m_enemy_spawn_points.emplace_back(spawn);
 	*/
+}
+
+void World::AddBalls() {
+
+	sf::Vector2f position1;
+	position1.x = m_world_bounds.width / 2;
+	position1.y = m_world_bounds.height / 6;
+
+	sf::Vector2f position2;
+	position2.x = m_world_bounds.width / 2;
+	position2.y = (m_world_bounds.height / 6) * 2;
+
+	sf::Vector2f position3;
+	position3.x = m_world_bounds.width / 2;
+	position3.y = (m_world_bounds.height / 6) * 3;
+
+	sf::Vector2f position4;
+	position4.x = m_world_bounds.width / 2;
+	position4.y = (m_world_bounds.height / 6) * 4;
+
+	sf::Vector2f position5;
+	position5.x = m_world_bounds.width / 2;
+	position5.y = m_world_bounds.height - 150;
+
+
+
+
+	if (m_networked_world)
+	{
+		return;
+	}
+
+
+	//time_t timer = time(0);
+
+	
+	//if(time(0)-st)
+	if (timer.getElapsedTime().asSeconds() >= 3) {
+		CreatePickup(position1, PickupType::kHealthRefill);
+		CreatePickup(position2, PickupType::kHealthRefill);
+		CreatePickup(position3, PickupType::kHealthRefill);
+		CreatePickup(position4, PickupType::kHealthRefill);
+		CreatePickup(position5, PickupType::kHealthRefill);
+
+		timer.restart();
+	}
+
+
+
 }
 
 void World::AddEnemies()
