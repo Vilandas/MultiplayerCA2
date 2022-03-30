@@ -11,9 +11,19 @@ namespace
 	const std::vector<PickupData> Table = InitializePickupData();
 }
 
+
 Pickup::Pickup(PickupType type, const TextureHolder& textures)
 	: Entity(1)
 	, m_type(type)
+	, m_sprite(textures.Get(Table[static_cast<int>(type)].m_texture), Table[static_cast<int>(type)].m_texture_rect)
+{
+	Utility::CentreOrigin(m_sprite);
+}
+
+Pickup::Pickup(PickupType type, const TextureHolder& textures, int index)
+	: Entity(1)
+	, m_type(type)
+	, m_index(index)
 	, m_sprite(textures.Get(Table[static_cast<int>(type)].m_texture), Table[static_cast<int>(type)].m_texture_rect)
 {
 	Utility::CentreOrigin(m_sprite);
@@ -29,6 +39,8 @@ sf::FloatRect Pickup::GetBoundingRect() const
 	return GetWorldTransform().transformRect(m_sprite.getGlobalBounds());
 }
 
+
+
 void Pickup::Apply(Aircraft& player) const
 {
 	Table[static_cast<int>(m_type)].m_action(player);
@@ -37,4 +49,9 @@ void Pickup::Apply(Aircraft& player) const
 void Pickup::DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(m_sprite, states);
+}
+
+int Pickup::GetIndex()
+{
+	return m_index;
 }

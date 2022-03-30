@@ -13,17 +13,26 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/RenderTexture.hpp>
 #include <SFML/Graphics/RenderTarget.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 #include <array>
-#include <SFML/Graphics/RenderWindow.hpp>
+#include <iostream>
+#include <limits>
 
 #include "BloomEffect.hpp"
 #include "CommandQueue.hpp"
 #include "SoundPlayer.hpp"
 
 #include "NetworkProtocol.hpp"
-#include "PickupType.hpp"
+#include "ParticleNode.hpp"
+#include "ParticleType.hpp"
 #include "PlayerAction.hpp"
+#include "PickupType.hpp"
+#include "Pickup.hpp"
+#include "PostEffect.hpp"
+#include "Projectile.hpp"
+#include "SoundNode.hpp"
+#include "Utility.hpp"
 
 namespace sf
 {
@@ -57,6 +66,8 @@ public:
 	Aircraft* GetAircraft(int identifier) const;
 	sf::FloatRect GetBattlefieldBounds() const;
 	void CreatePickup(sf::Vector2f position, PickupType type);
+
+	void CreatePickup(sf::Vector2f position, PickupType type, int index);
 	bool PollGameAction(GameActions::Action& out);
 
 
@@ -70,10 +81,12 @@ private:
 	void SpawnEnemies();
 	void AddEnemies();
 	void AddBalls();
+	void RespawnBalls(int index);
 	void GuideMissiles();
 	void HandleCollisions();
 	void DestroyEntitiesOutsideView();
 	void UpdateSounds();
+	void CheckRespawn();
 
 private:
 	struct SpawnPoint
@@ -114,5 +127,13 @@ private:
 	bool m_networked_world;
 	NetworkNode* m_network_node;
 	SpriteNode* m_finish_sprite;
+
+	sf::Vector2f m_position1;
+	sf::Vector2f m_position2;
+	sf::Vector2f m_position3;
+	sf::Vector2f m_position4;
+	sf::Vector2f m_position5;
+
+	std::queue<int> m_PickupQueue;
 };
 

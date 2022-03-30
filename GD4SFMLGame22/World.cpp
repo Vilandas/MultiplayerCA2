@@ -1,18 +1,7 @@
 #include "World.hpp"
 
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <iostream>
-#include <limits>
-
-#include "ParticleNode.hpp"
-#include "ParticleType.hpp"
-#include "Pickup.hpp"
-#include "PostEffect.hpp"
-#include "Projectile.hpp"
-#include "SoundNode.hpp"
-#include "Utility.hpp"
-
 sf::Clock timer;
+
 
 World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sounds, bool networked)
 	: m_target(output_target)
@@ -23,6 +12,7 @@ World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sou
 	, m_scenegraph()
 	, m_scene_layers()
 	, m_world_bounds(0.f, 0.f, 1920, 1088)
+	, m_position1(m_world_bounds.width / 2, m_world_bounds.height / 6)
 	, m_spawn_position(m_camera.getSize().x/2.f, m_world_bounds.height - m_camera.getSize().y /2.f)
 	, m_scrollspeed(-50.f)
 	, m_scrollspeed_compensation(1.f)
@@ -30,6 +20,7 @@ World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sou
 	, m_enemy_spawn_points()
 	, m_ball_spawn_points()
 	, m_active_enemies()
+	, m_PickupQueue()
 	, m_networked_world(networked)
 	, m_network_node(nullptr)
 	, m_finish_sprite(nullptr)
@@ -39,6 +30,10 @@ World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sou
 	LoadTextures();
 	BuildScene();
 	m_camera.setCenter(m_spawn_position);
+
+
+
+
 }
 
 //void World::SetWorldScrollCompensation(float compensation)
@@ -81,7 +76,8 @@ void World::Update(sf::Time dt)
 
 	UpdateSounds();
 
-	AddBalls();
+	CheckRespawn();
+
 }
 
 void World::Draw()
@@ -137,6 +133,14 @@ Aircraft* World::AddAircraft(int identifier)
 void World::CreatePickup(sf::Vector2f position, PickupType type)
 {
 	std::unique_ptr<Pickup> pickup(new Pickup(type, m_textures));
+	pickup->setPosition(position);
+	pickup->SetVelocity(0.f, 0.f);
+	m_scene_layers[static_cast<int>(Layers::kUpperAir)]->AttachChild(std::move(pickup));
+}
+
+void World::CreatePickup(sf::Vector2f position, PickupType type, int index)
+{
+	std::unique_ptr<Pickup> pickup(new Pickup(type, m_textures, index));
 	pickup->setPosition(position);
 	pickup->SetVelocity(0.f, 0.f);
 	m_scene_layers[static_cast<int>(Layers::kUpperAir)]->AttachChild(std::move(pickup));
@@ -234,6 +238,9 @@ void World::BuildScene()
 	}
 	//m_spawn_position.x - 500;
 	AddEnemies();
+
+	AddBalls();
+
 	
 }
 
@@ -321,6 +328,8 @@ void World::AddEnemy(AircraftType type, float relX, float relY)
 
 void World::AddBalls() {
 
+
+
 	sf::Vector2f position1;
 	position1.x = m_world_bounds.width / 2;
 	position1.y = m_world_bounds.height / 6;
@@ -342,34 +351,70 @@ void World::AddBalls() {
 	position5.y = m_world_bounds.height - 150;
 
 
-
-
-	if (m_networked_world)
-	{
-		return;
-	}
+	//if (m_networked_world)
+	//{
+	//	return;
+	//}
 
 
 	//time_t timer = time(0);
 
 	
 	//if(time(0)-st)
-	if (timer.getElapsedTime().asSeconds() >= 3) {
-		CreatePickup(position1, PickupType::kHealthRefill);
-		CreatePickup(position2, PickupType::kHealthRefill);
-		CreatePickup(position3, PickupType::kHealthRefill);
-		CreatePickup(position4, PickupType::kHealthRefill);
-		CreatePickup(position5, PickupType::kHealthRefill);
+	//if (timer.getElapsedTime().asSeconds() >= 3) {
+		CreatePickup(position1, PickupType::kHealthRefill, 1);
+		CreatePickup(position2, PickupType::kHealthRefill, 2);
+		CreatePickup(position3, PickupType::kHealthRefill, 3);
+		CreatePickup(position4, PickupType::kHealthRefill, 4);
+		CreatePickup(position5, PickupType::kHealthRefill, 5);
 
-		timer.restart();
-	}
+		//timer.restart();
+	//}
 
 
 
 }
 
+
+void World::RespawnBalls(int index) {
+	sf::Vector2f SetBall;
+
+	switch (index) {
+
+	case 1:
+		SetBall.x = m_world_bounds.width / 2;
+		SetBall.y = m_world_bounds.height / 6;
+		break;
+
+	case 2:
+		SetBall.x = m_world_bounds.width / 2;
+		SetBall.y = (m_world_bounds.height / 6) *2;
+		break;
+		
+	case 3:
+		SetBall.x = m_world_bounds.width / 2;
+		SetBall.y = (m_world_bounds.height / 6) * 3;
+		break;
+
+	case 4:
+		SetBall.x = m_world_bounds.width / 2;
+		SetBall.y = (m_world_bounds.height / 6) * 4;
+		break;
+
+	case 5:
+		SetBall.x = m_world_bounds.width / 2;
+		SetBall.y = (m_world_bounds.height / 6) -150;
+		break;
+
+	}
+
+	CreatePickup(SetBall, PickupType::kHealthRefill, index);
+}
+
 void World::AddEnemies()
 {
+
+
 	if(m_networked_world)
 	{
 		return;
@@ -497,14 +542,22 @@ void World::HandleCollisions()
 		else if (MatchesCategories(pair, Category::Type::kPlayerAircraft, Category::Type::kPickup))
 		{
 			auto& player = static_cast<Aircraft&>(*pair.first);
-			auto& pickup = static_cast<Pickup&>(*pair.second);
+			auto pickup = dynamic_cast<Pickup*>(pair.second);
 			if (!player.HasBall()) 
 			{
-				pickup.Apply(player);
-				pickup.Destroy();
+				//sf::Vector2f resetPos = pickup.getPosition();
+				
+				m_PickupQueue.push(pickup->GetIndex());
+
+				pickup->Apply(player);
+				pickup->Destroy();
 				player.PlayLocalSound(m_command_queue, SoundEffect::kCollectPickup);
 				player.PickUpBall();
 				std::cout << "Player has ball =" << player.HasBall() << std::endl;
+
+				//RespawnBalls(pickup.GetIndex());
+
+				//AddBalls(resetPos);
 			}
 		}
 
@@ -562,4 +615,19 @@ void World::UpdateSounds()
 
 	// Remove unused sounds
 	m_sounds.RemoveStoppedSounds();
+}
+
+void World::CheckRespawn()
+{
+	std::cout << m_PickupQueue.size()<< std::endl;
+
+	if (timer.getElapsedTime().asSeconds() >= 3) {
+		timer.restart();
+		//RespawnBalls()
+		while (!m_PickupQueue.empty()) {
+			int index = m_PickupQueue.front();
+			m_PickupQueue.pop();
+			RespawnBalls(index);
+		}
+	}
 }
