@@ -263,7 +263,22 @@ void World::AdaptPlayerPosition()
 		position.x = std::min(position.x, view_bounds.left + view_bounds.width - border_distance);
 		position.y = std::max(position.y, view_bounds.top + border_distance);
 		position.y = std::min(position.y, view_bounds.top + view_bounds.height - border_distance);
+
+		if (aircraft->GetTeam1() == true) {
+			if (position.x >= (m_world_bounds.width / 2)) {
+				position.x = m_world_bounds.width / 2;
+			}
+		}
+
+		if (aircraft->GetTeam1() == false) {
+			if (position.x <= (m_world_bounds.width / 2)) {
+				position.x = m_world_bounds.width / 2;
+			}
+		}
 		aircraft->setPosition(position);
+
+		
+
 	}
 }
 

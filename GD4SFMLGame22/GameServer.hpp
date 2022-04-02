@@ -36,6 +36,7 @@ private:
 		sf::Int32 m_hitpoints;
 		sf::Int32 m_missile_ammo;
 		std::map<sf::Int32, bool> m_realtime_actions;
+		bool m_team1;
 	};
 
 	typedef std::unique_ptr<RemotePeer> PeerPtr;

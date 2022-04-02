@@ -317,6 +317,24 @@ void GameServer::HandleIncomingPacket(sf::Packet& packet, RemotePeer& receiving_
 		sf::Packet request_packet;
 		request_packet << static_cast<sf::Int32>(Server::PacketType::AcceptCoopPartner);
 		request_packet << m_aircraft_identifier_counter;
+
+		float spawn_centre = static_cast<float>(Utility::RandomInt(500) - 250);
+
+		float plane_distance = 0.f;
+		float next_spawn_position = spawn_centre;
+
+		//if (m_aircraft_identifier_counter % 2 == 0) {
+		//	m_aircraft_info[m_aircraft_identifier_counter].m_position = sf::Vector2f(m_battlefield_rect.width / 2 + spawn_centre, m_battlefield_rect.top + m_battlefield_rect.height / 2);
+		//	m_aircraft_info[m_aircraft_identifier_counter].m_team1 = false;
+		//}
+		//else {
+		//	m_aircraft_info[m_aircraft_identifier_counter].m_position = sf::Vector2f(m_battlefield_rect.width / 2 - spawn_centre, m_battlefield_rect.top + m_battlefield_rect.height / 2);
+		//	m_aircraft_info[m_aircraft_identifier_counter].m_team1 = true;
+		//}
+
+		m_aircraft_info[m_aircraft_identifier_counter].m_team1 = false;
+
+
 		request_packet << m_aircraft_info[m_aircraft_identifier_counter].m_position.x;
 		request_packet << m_aircraft_info[m_aircraft_identifier_counter].m_position.y;
 
@@ -406,6 +424,47 @@ void GameServer::HandleIncomingConnections()
 		sf::Packet packet;
 		packet << static_cast<sf::Int32>(Server::PacketType::SpawnSelf);
 		packet << m_aircraft_identifier_counter;
+
+		float spawn_centre = static_cast<float>(Utility::RandomInt(500) - 250);
+
+		float plane_distance = 0.f;
+		float next_spawn_position = spawn_centre;
+
+		if (m_aircraft_identifier_counter% 2 == 0) {
+			m_aircraft_info[m_aircraft_identifier_counter].m_position = sf::Vector2f(m_battlefield_rect.width / 2 + spawn_centre, m_battlefield_rect.top + m_battlefield_rect.height / 2);
+			m_aircraft_info[m_aircraft_identifier_counter].m_team1 = false;
+		}
+		else {
+			m_aircraft_info[m_aircraft_identifier_counter].m_position = sf::Vector2f(m_battlefield_rect.width / 2 - spawn_centre, m_battlefield_rect.top + m_battlefield_rect.height / 2);
+			m_aircraft_info[m_aircraft_identifier_counter].m_team1 = true;
+		}
+
+
+		
+
+		//If there is only one enemy it is at the spawn_centre
+
+
+		//If there are two then they are centred on the spawn centre
+		//if (enemy_count == 2)
+		//{
+		//	plane_distance = static_cast<float>(150 + Utility::RandomInt(250));
+		//	next_spawn_position = spawn_centre - plane_distance / 2.f;
+		//}
+
+
+		//		if (aircraft->GetTeam1() == true) {
+		//	if (position.x >= (m_world_bounds.width / 2)) {
+		//		position.x = m_world_bounds.width / 2;
+		//	}
+		//}
+
+		//if (aircraft->GetTeam1() == false) {
+		//	if (position.x <= (m_world_bounds.width / 2)) {
+		//		position.x = m_world_bounds.width / 2;
+		//	}
+		//}
+
 		packet << m_aircraft_info[m_aircraft_identifier_counter].m_position.x;
 		packet << m_aircraft_info[m_aircraft_identifier_counter].m_position.y;
 
@@ -418,6 +477,7 @@ void GameServer::HandleIncomingConnections()
 		m_peers[m_connected_players]->m_socket.send(packet);
 		m_peers[m_connected_players]->m_ready = true;
 		m_peers[m_connected_players]->m_last_packet_time = Now();
+
 
 		m_aircraft_count++;
 		m_connected_players++;

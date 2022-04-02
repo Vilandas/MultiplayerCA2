@@ -46,6 +46,7 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 , m_travelled_distance(0.f)
 , m_directions_index(0)
 , m_identifier(0)
+, m_team1(true)
 {
 	m_explosion.SetFrameSize(sf::Vector2i(256, 256));
 	m_explosion.SetNumFrames(16);
@@ -135,6 +136,14 @@ void Aircraft::IncreaseFireRate()
 	{
 		++m_fire_rate;
 	}
+}
+
+bool Aircraft::GetTeam1(){
+	return m_team1;
+}
+
+void Aircraft::SetTeam1(bool team) {
+	m_team1 = team;
 }
 
 void Aircraft::IncreaseSpread()
