@@ -32,7 +32,7 @@ PauseState::PauseState(StateStack& stack, Context context, bool let_updates_thro
 	});
 
 	auto backToMenuButton = std::make_shared<GUI::Button>(context);
-	backToMenuButton->setPosition(0.5f * window_size.x - 100, 0.4f * window_size.y + 125);
+	backToMenuButton->setPosition(0.5f * window_size.x - 100, 0.4f * window_size.y + 150);
 	backToMenuButton->SetText("Back to menu");
 	backToMenuButton->SetCallback([this]()
 	{

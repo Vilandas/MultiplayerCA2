@@ -32,7 +32,7 @@ Application::Application()
 	m_statistics_text.setCharacterSize(10u);
 
 	RegisterStates();
-	m_stack.PushState(StateID::kTitle);
+	m_stack.PushState(StateID::kMenu);
 }
 
 void Application::Run()

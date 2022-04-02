@@ -134,6 +134,9 @@ bool MultiplayerGameState::Update(sf::Time dt)
 			if(std::find(m_local_player_identifiers.begin(), m_local_player_identifiers.end(), itr->first) != m_local_player_identifiers.end())
 			{
 				found_local_plane = true;
+				//itr->first.get()->GetMissionStatus;
+
+				m_world.GetAircraft(itr->first)->UpdateTexts();
 			}
 
 			if(!m_world.GetAircraft(itr->first))

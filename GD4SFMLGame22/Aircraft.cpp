@@ -89,7 +89,7 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 		AttachChild(std::move(missileDisplay));
 	}
 
-	UpdateTexts();
+	//UpdateTexts();
 
 }
 
@@ -167,7 +167,7 @@ void Aircraft::UpdateTexts()
 	}
 	else
 	{
-		m_health_display->SetString(std::to_string(GetHitPoints()) + "HP");
+		m_health_display->SetString("^");
 	}
 	m_health_display->setPosition(0.f, 50.f);
 	m_health_display->setRotation(-getRotation());
@@ -188,7 +188,7 @@ void Aircraft::UpdateTexts()
 
 void Aircraft::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 {
-	UpdateTexts();
+	/*UpdateTexts();*/
 	UpdateRollAnimation();
 
 	//Entity has been destroyed, possibly drop pickup, mark for removal
