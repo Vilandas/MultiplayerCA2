@@ -23,7 +23,7 @@ GameServer::GameServer(sf::Vector2f battlefield_size)
 	, m_max_connected_players(15)
 	, m_connected_players(0)
 	, m_world_height(1080.0f)
-	, m_battlefield_rect(0.f, m_world_height-battlefield_size.y, battlefield_size.x, battlefield_size.y)
+	, m_battlefield_rect(0.f, 0.f, battlefield_size.x, battlefield_size.y)
 	, m_battlefield_scrollspeed(-50.f)
 	, m_aircraft_count(0)
 	, m_peers(1)
@@ -50,7 +50,7 @@ void GameServer::NotifyPlayerSpawn(sf::Int32 aircraft_identifier)
 	sf::Packet packet;
 	//First thing for every packet is what type of packet it is
 	packet << static_cast<sf::Int32>(Server::PacketType::PlayerConnect);
-	packet << aircraft_identifier << m_aircraft_info[aircraft_identifier].m_position.x << m_aircraft_info[aircraft_identifier].m_position.y;
+	packet << aircraft_identifier << m_aircraft_info[aircraft_identifier].m_position.x << m_aircraft_info[aircraft_identifier].m_position.y << m_aircraft_info[aircraft_identifier].m_team1;
 	for(std::size_t i=0; i < m_connected_players; ++i)
 	{
 		if(m_peers[i]->m_ready)
@@ -467,6 +467,7 @@ void GameServer::HandleIncomingConnections()
 
 		packet << m_aircraft_info[m_aircraft_identifier_counter].m_position.x;
 		packet << m_aircraft_info[m_aircraft_identifier_counter].m_position.y;
+		packet << m_aircraft_info[m_aircraft_identifier_counter].m_team1;
 
 		m_peers[m_connected_players]->m_aircraft_identifiers.emplace_back(m_aircraft_identifier_counter);
 
@@ -534,7 +535,7 @@ void GameServer::InformWorldState(sf::TcpSocket& socket)
 {
 	sf::Packet packet;
 	packet << static_cast<sf::Int32>(Server::PacketType::InitialState);
-	packet << m_world_height << m_battlefield_rect.top + m_battlefield_rect.height;
+	packet << m_world_height /*<< m_battlefield_rect.top + m_battlefield_rect.height*/;
 	packet << static_cast<sf::Int32>(m_aircraft_count);
 
 	for(std::size_t i=0; i < m_connected_players; ++i)
@@ -543,7 +544,7 @@ void GameServer::InformWorldState(sf::TcpSocket& socket)
 		{
 			for(sf::Int32 identifier : m_peers[i]->m_aircraft_identifiers)
 			{
-				packet << identifier << m_aircraft_info[identifier].m_position.x << m_aircraft_info[identifier].m_position.y << m_aircraft_info[identifier].m_hitpoints << m_aircraft_info[identifier].m_missile_ammo;
+				packet << identifier << m_aircraft_info[identifier].m_position.x << m_aircraft_info[identifier].m_position.y << m_aircraft_info[identifier].m_hitpoints << m_aircraft_info[identifier].m_missile_ammo << m_aircraft_info[identifier].m_team1;
 			}
 		}
 	}
