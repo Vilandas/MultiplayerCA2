@@ -44,8 +44,8 @@ public:
 	void PickUpBall();
 	bool HasBall();
 
-	bool GetTeam1();
-	void SetTeam1(bool team);
+	bool GetTeamPink();
+	void SetTeamPink(bool team);
 	
 private:
 	void DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -97,6 +97,5 @@ private:
 
 	int m_current_walk_frame = 0;
 	int m_current_shoot_frame = 0;
-	bool m_team1 = true;
+	bool m_TeamPink = true;
 };
-

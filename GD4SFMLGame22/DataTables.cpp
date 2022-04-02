@@ -9,15 +9,25 @@ std::vector<AircraftData> InitializeAircraftData()
 {
 	std::vector<AircraftData> data(static_cast<int>(AircraftType::kAircraftCount));
 
-	data[static_cast<int>(AircraftType::kEagle)].m_hitpoints = 100;
-	data[static_cast<int>(AircraftType::kEagle)].m_speed = 200.f;
-	data[static_cast<int>(AircraftType::kEagle)].m_fire_interval = sf::seconds(1);
-	data[static_cast<int>(AircraftType::kEagle)].m_texture = Textures::kEntities;
-	data[static_cast<int>(AircraftType::kEagle)].m_walk_texture_rect = sf::IntRect(0, 0, 32, 32);
-	data[static_cast<int>(AircraftType::kEagle)].m_throw_texture_rect = sf::IntRect(0, 0 , 32, 32);
-	data[static_cast<int>(AircraftType::kEagle)].m_has_roll_animation = true;
-	data[static_cast<int>(AircraftType::kEagle)].m_walk_animation_frames = 6;
-	data[static_cast<int>(AircraftType::kEagle)].m_throw_animation_frames = 4;
+	data[static_cast<int>(AircraftType::kTeamPink)].m_hitpoints = 100;
+	data[static_cast<int>(AircraftType::kTeamPink)].m_speed = 200.f;
+	data[static_cast<int>(AircraftType::kTeamPink)].m_fire_interval = sf::seconds(1);
+	data[static_cast<int>(AircraftType::kTeamPink)].m_texture = Textures::kEntities;
+	data[static_cast<int>(AircraftType::kTeamPink)].m_walk_texture_rect = sf::IntRect(0, 64, 32, 32);
+	data[static_cast<int>(AircraftType::kTeamPink)].m_throw_texture_rect = sf::IntRect(0, 96 , 32, 32);
+	data[static_cast<int>(AircraftType::kTeamPink)].m_has_roll_animation = true;
+	data[static_cast<int>(AircraftType::kTeamPink)].m_walk_animation_frames = 6;
+	data[static_cast<int>(AircraftType::kTeamPink)].m_throw_animation_frames = 4;
+
+	data[static_cast<int>(AircraftType::kTeamBlue)].m_hitpoints = 100;
+	data[static_cast<int>(AircraftType::kTeamBlue)].m_speed = 200.f;
+	data[static_cast<int>(AircraftType::kTeamBlue)].m_fire_interval = sf::seconds(1);
+	data[static_cast<int>(AircraftType::kTeamBlue)].m_texture = Textures::kEntities;
+	data[static_cast<int>(AircraftType::kTeamBlue)].m_walk_texture_rect = sf::IntRect(0, 0, 32, 32);
+	data[static_cast<int>(AircraftType::kTeamBlue)].m_throw_texture_rect = sf::IntRect(0, 32, 32, 32);
+	data[static_cast<int>(AircraftType::kTeamBlue)].m_has_roll_animation = true;
+	data[static_cast<int>(AircraftType::kTeamBlue)].m_walk_animation_frames = 6;
+	data[static_cast<int>(AircraftType::kTeamBlue)].m_throw_animation_frames = 4;
 
 	data[static_cast<int>(AircraftType::kRaptor)].m_hitpoints = 20;
 	data[static_cast<int>(AircraftType::kRaptor)].m_speed = 80.f;
@@ -51,8 +61,8 @@ std::vector<ProjectileData> InitializeProjectileData()
 {
 	std::vector<ProjectileData> data(static_cast<int>(ProjectileType::kProjectileCount));
 
-	data[static_cast<int>(ProjectileType::kAlliedBullet)].m_damage = 10;
-	data[static_cast<int>(ProjectileType::kAlliedBullet)].m_speed = 300;
+	data[static_cast<int>(ProjectileType::kAlliedBullet)].m_damage = 1000;
+	data[static_cast<int>(ProjectileType::kAlliedBullet)].m_speed = 600;
 	data[static_cast<int>(ProjectileType::kAlliedBullet)].m_texture = Textures::kEntities;
 	data[static_cast<int>(ProjectileType::kAlliedBullet)].m_texture_rect = sf::IntRect(155, 32, 16, 16);
 

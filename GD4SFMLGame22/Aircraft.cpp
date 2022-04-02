@@ -46,7 +46,7 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 , m_travelled_distance(0.f)
 , m_directions_index(0)
 , m_identifier(0)
-, m_team1(true)
+, m_TeamPink(true)
 {
 	m_explosion.SetFrameSize(sf::Vector2i(256, 256));
 	m_explosion.SetNumFrames(16);
@@ -138,12 +138,12 @@ void Aircraft::IncreaseFireRate()
 	}
 }
 
-bool Aircraft::GetTeam1(){
-	return m_team1;
+bool Aircraft::GetTeamPink(){
+	return m_TeamPink;
 }
 
-void Aircraft::SetTeam1(bool team) {
-	m_team1 = team;
+void Aircraft::SetTeamPink(bool team) {
+	m_TeamPink = team;
 }
 
 void Aircraft::IncreaseSpread()
@@ -323,7 +323,7 @@ void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 
 bool Aircraft::IsAllied() const
 {
-	return m_type == AircraftType::kEagle;
+	return m_type == AircraftType::kTeamPink;
 }
 
 
@@ -377,8 +377,6 @@ void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_of
 	}
 
 
-
-
 	float sign = IsAllied() ? -1.f : +1.f;
 	projectile->setPosition(GetWorldPosition() + offset * sign);
 	projectile->SetVelocity(velocity * sign);
@@ -425,6 +423,7 @@ void Aircraft::CreatePickup(SceneNode& node, const TextureHolder& textures) cons
 
 void Aircraft::UpdateRollAnimation()
 {
+	//std::cout << m_current_walk_frame << std::endl;
 	if (Table[static_cast<int>(m_type)].m_has_roll_animation)
 	{
 		sf::IntRect textureRect = Table[static_cast<int>(m_type)].m_walk_texture_rect;
@@ -442,6 +441,7 @@ void Aircraft::UpdateRollAnimation()
 				time_since_last_frame += 250.0f;
 				
 				textureRect.left += m_current_walk_frame * textureRect.width;
+				//std::cout << textureRect.left << std::endl;
 				m_current_walk_frame++;
 				std::cout << m_current_walk_frame << std::endl;
 				//m_sprite.setTextureRect(textureRect);

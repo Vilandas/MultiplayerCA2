@@ -360,11 +360,11 @@ void MultiplayerGameState::HandlePacket(sf::Int32 packet_type, sf::Packet& packe
 	{
 		sf::Int32 aircraft_identifier;
 		sf::Vector2f aircraft_position;
-		bool team1;
-		packet >> aircraft_identifier >> aircraft_position.x >> aircraft_position.y >> team1;
+		bool TeamPink;
+		packet >> aircraft_identifier >> aircraft_position.x >> aircraft_position.y >> TeamPink;
 		Aircraft* aircraft = m_world.AddAircraft(aircraft_identifier);
 		aircraft->setPosition(aircraft_position);
-		aircraft->SetTeam1(team1);
+		aircraft->SetTeamPink(TeamPink);
 		m_players[aircraft_identifier].reset(new Player(&m_socket, aircraft_identifier, GetContext().keys1));
 		m_local_player_identifiers.push_back(aircraft_identifier);
 		m_game_started = true;
@@ -375,12 +375,12 @@ void MultiplayerGameState::HandlePacket(sf::Int32 packet_type, sf::Packet& packe
 	{
 		sf::Int32 aircraft_identifier;
 		sf::Vector2f aircraft_position;
-		bool team1;
-		packet >> aircraft_identifier >> aircraft_position.x >> aircraft_position.y >> team1;
+		bool TeamPink;
+		packet >> aircraft_identifier >> aircraft_position.x >> aircraft_position.y >> TeamPink;
 
 		Aircraft* aircraft = m_world.AddAircraft(aircraft_identifier);
 		aircraft->setPosition(aircraft_position);
-		aircraft->SetTeam1(team1);
+		aircraft->SetTeamPink(TeamPink);
 		m_players[aircraft_identifier].reset(new Player(&m_socket, aircraft_identifier, nullptr));
 	}
 	break;
@@ -410,14 +410,14 @@ void MultiplayerGameState::HandlePacket(sf::Int32 packet_type, sf::Packet& packe
 			sf::Int32 hitpoints;
 			sf::Int32 missile_ammo;
 			sf::Vector2f aircraft_position;
-			bool team1;
-			packet >> aircraft_identifier >> aircraft_position.x >> aircraft_position.y >> hitpoints >> missile_ammo >> team1;
+			bool TeamPink;
+			packet >> aircraft_identifier >> aircraft_position.x >> aircraft_position.y >> hitpoints >> missile_ammo >> TeamPink;
 
 			Aircraft* aircraft = m_world.AddAircraft(aircraft_identifier);
 			aircraft->setPosition(aircraft_position);
 			aircraft->SetHitpoints(hitpoints);
 			aircraft->SetMissileAmmo(missile_ammo);
-			aircraft->SetTeam1(team1);
+			aircraft->SetTeamPink(TeamPink);
 
 			m_players[aircraft_identifier].reset(new Player(&m_socket, aircraft_identifier, nullptr));
 		}

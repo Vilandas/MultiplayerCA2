@@ -121,7 +121,7 @@ void World::RemoveAircraft(int identifier)
 
 Aircraft* World::AddAircraft(int identifier)
 {
-	std::unique_ptr<Aircraft> player(new Aircraft(AircraftType::kEagle, m_textures, m_fonts));
+	std::unique_ptr<Aircraft> player(new Aircraft(AircraftType::kTeamPink, m_textures, m_fonts));
 	player->setPosition(m_camera.getCenter());
 	player->SetIdentifier(identifier);
 	player->setScale(sf::Vector2f(3, 3));
@@ -264,13 +264,13 @@ void World::AdaptPlayerPosition()
 		position.y = std::max(position.y, view_bounds.top + border_distance);
 		position.y = std::min(position.y, view_bounds.top + view_bounds.height - border_distance);
 
-		if (aircraft->GetTeam1() == true) {
+		if (aircraft->GetTeamPink() == true) {
 			if (position.x >= (m_world_bounds.width / 2)) {
 				position.x = m_world_bounds.width / 2;
 			}
 		}
 
-		if (aircraft->GetTeam1() == false) {
+		if (aircraft->GetTeamPink() == false) {
 			if (position.x <= (m_world_bounds.width / 2)) {
 				position.x = m_world_bounds.width / 2;
 			}
@@ -636,8 +636,6 @@ void World::UpdateSounds()
 
 void World::CheckRespawn()
 {
-	//std::cout << m_PickupQueue.size()<< std::endl;
-
 	if (timer.getElapsedTime().asSeconds() >= 3) {
 		timer.restart();
 		//RespawnBalls()

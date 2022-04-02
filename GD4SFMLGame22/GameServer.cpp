@@ -50,7 +50,7 @@ void GameServer::NotifyPlayerSpawn(sf::Int32 aircraft_identifier)
 	sf::Packet packet;
 	//First thing for every packet is what type of packet it is
 	packet << static_cast<sf::Int32>(Server::PacketType::PlayerConnect);
-	packet << aircraft_identifier << m_aircraft_info[aircraft_identifier].m_position.x << m_aircraft_info[aircraft_identifier].m_position.y << m_aircraft_info[aircraft_identifier].m_team1;
+	packet << aircraft_identifier << m_aircraft_info[aircraft_identifier].m_position.x << m_aircraft_info[aircraft_identifier].m_position.y << m_aircraft_info[aircraft_identifier].m_TeamPink;
 	for(std::size_t i=0; i < m_connected_players; ++i)
 	{
 		if(m_peers[i]->m_ready)
@@ -325,14 +325,14 @@ void GameServer::HandleIncomingPacket(sf::Packet& packet, RemotePeer& receiving_
 
 		//if (m_aircraft_identifier_counter % 2 == 0) {
 		//	m_aircraft_info[m_aircraft_identifier_counter].m_position = sf::Vector2f(m_battlefield_rect.width / 2 + spawn_centre, m_battlefield_rect.top + m_battlefield_rect.height / 2);
-		//	m_aircraft_info[m_aircraft_identifier_counter].m_team1 = false;
+		//	m_aircraft_info[m_aircraft_identifier_counter].m_TeamPink = false;
 		//}
 		//else {
 		//	m_aircraft_info[m_aircraft_identifier_counter].m_position = sf::Vector2f(m_battlefield_rect.width / 2 - spawn_centre, m_battlefield_rect.top + m_battlefield_rect.height / 2);
-		//	m_aircraft_info[m_aircraft_identifier_counter].m_team1 = true;
+		//	m_aircraft_info[m_aircraft_identifier_counter].m_TeamPink = true;
 		//}
 
-		m_aircraft_info[m_aircraft_identifier_counter].m_team1 = false;
+		m_aircraft_info[m_aircraft_identifier_counter].m_TeamPink = false;
 
 
 		request_packet << m_aircraft_info[m_aircraft_identifier_counter].m_position.x;
@@ -432,11 +432,11 @@ void GameServer::HandleIncomingConnections()
 
 		if (m_aircraft_identifier_counter% 2 == 0) {
 			m_aircraft_info[m_aircraft_identifier_counter].m_position = sf::Vector2f(m_battlefield_rect.width / 2 + spawn_centre, m_battlefield_rect.top + m_battlefield_rect.height / 2);
-			m_aircraft_info[m_aircraft_identifier_counter].m_team1 = false;
+			m_aircraft_info[m_aircraft_identifier_counter].m_TeamPink = false;
 		}
 		else {
 			m_aircraft_info[m_aircraft_identifier_counter].m_position = sf::Vector2f(m_battlefield_rect.width / 2 - spawn_centre, m_battlefield_rect.top + m_battlefield_rect.height / 2);
-			m_aircraft_info[m_aircraft_identifier_counter].m_team1 = true;
+			m_aircraft_info[m_aircraft_identifier_counter].m_TeamPink = true;
 		}
 
 
@@ -453,13 +453,13 @@ void GameServer::HandleIncomingConnections()
 		//}
 
 
-		//		if (aircraft->GetTeam1() == true) {
+		//		if (aircraft->GetTeamPink() == true) {
 		//	if (position.x >= (m_world_bounds.width / 2)) {
 		//		position.x = m_world_bounds.width / 2;
 		//	}
 		//}
 
-		//if (aircraft->GetTeam1() == false) {
+		//if (aircraft->GetTeamPink() == false) {
 		//	if (position.x <= (m_world_bounds.width / 2)) {
 		//		position.x = m_world_bounds.width / 2;
 		//	}
@@ -467,7 +467,7 @@ void GameServer::HandleIncomingConnections()
 
 		packet << m_aircraft_info[m_aircraft_identifier_counter].m_position.x;
 		packet << m_aircraft_info[m_aircraft_identifier_counter].m_position.y;
-		packet << m_aircraft_info[m_aircraft_identifier_counter].m_team1;
+		packet << m_aircraft_info[m_aircraft_identifier_counter].m_TeamPink;
 
 		m_peers[m_connected_players]->m_aircraft_identifiers.emplace_back(m_aircraft_identifier_counter);
 
@@ -544,7 +544,7 @@ void GameServer::InformWorldState(sf::TcpSocket& socket)
 		{
 			for(sf::Int32 identifier : m_peers[i]->m_aircraft_identifiers)
 			{
-				packet << identifier << m_aircraft_info[identifier].m_position.x << m_aircraft_info[identifier].m_position.y << m_aircraft_info[identifier].m_hitpoints << m_aircraft_info[identifier].m_missile_ammo << m_aircraft_info[identifier].m_team1;
+				packet << identifier << m_aircraft_info[identifier].m_position.x << m_aircraft_info[identifier].m_position.y << m_aircraft_info[identifier].m_hitpoints << m_aircraft_info[identifier].m_missile_ammo << m_aircraft_info[identifier].m_TeamPink;
 			}
 		}
 	}
