@@ -356,7 +356,7 @@ void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_of
 {
 	std::unique_ptr<Projectile> projectile(new Projectile(type, textures));
 	sf::Vector2f offset(x_offset * m_sprite.getGlobalBounds().width, y_offset * m_sprite.getGlobalBounds().height);
-	//for left siude team
+	//for left side team
 	
 
 	
@@ -373,6 +373,7 @@ void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_of
 	float sign = IsAllied() ? -1.f : +1.f;
 	projectile->setPosition(GetWorldPosition() + offset * sign);
 	projectile->SetVelocity(velocity * sign);
+	projectile->setScale(2.f, 2.f);
 	node.AttachChild(std::move(projectile));
 
 	
@@ -435,7 +436,7 @@ void Aircraft::UpdateRollAnimation()
 				m_current_walk_frame++;
 				if (m_current_walk_frame > Table[static_cast<int>(m_type)].m_walk_animation_frames - 1)
 				{
-					m_current_walk_frame = 0;
+					m_current_walk_frame = 0; 
 					clock.restart();
 				}
 				m_sprite.setTextureRect(textureRect);

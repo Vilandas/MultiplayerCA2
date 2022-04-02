@@ -14,7 +14,7 @@ std::vector<AircraftData> InitializeAircraftData()
 	data[static_cast<int>(AircraftType::kEagle)].m_fire_interval = sf::seconds(1);
 	data[static_cast<int>(AircraftType::kEagle)].m_texture = Textures::kEntities;
 	data[static_cast<int>(AircraftType::kEagle)].m_walk_texture_rect = sf::IntRect(0, 0, 32, 32);
-	data[static_cast<int>(AircraftType::kEagle)].m_throw_texture_rect = sf::IntRect(0, 0, 32, 32);
+	data[static_cast<int>(AircraftType::kEagle)].m_throw_texture_rect = sf::IntRect(0, 0 , 32, 32);
 	data[static_cast<int>(AircraftType::kEagle)].m_has_roll_animation = true;
 	data[static_cast<int>(AircraftType::kEagle)].m_walk_animation_frames = 6;
 	data[static_cast<int>(AircraftType::kEagle)].m_throw_animation_frames = 4;
@@ -75,7 +75,7 @@ std::vector<PickupData> InitializePickupData()
 
 	data[static_cast<int>(PickupType::kHealthRefill)].m_texture = Textures::kEntities;
 	data[static_cast<int>(PickupType::kHealthRefill)].m_texture_rect = sf::IntRect(155, 32, 16, 16);
-	data[static_cast<int>(PickupType::kHealthRefill)].m_action = [](Aircraft& a) {a.Repair(25); };
+	data[static_cast<int>(PickupType::kHealthRefill)].m_action = [](Aircraft& a) {a.Repair(1); };
 
 	data[static_cast<int>(PickupType::kMissileRefill)].m_texture = Textures::kEntities;
 	data[static_cast<int>(PickupType::kMissileRefill)].m_texture_rect = sf::IntRect(40, 64, 40, 40);

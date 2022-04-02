@@ -135,6 +135,7 @@ void World::CreatePickup(sf::Vector2f position, PickupType type)
 	std::unique_ptr<Pickup> pickup(new Pickup(type, m_textures));
 	pickup->setPosition(position);
 	pickup->SetVelocity(0.f, 0.f);
+	pickup->setScale(2.f, 2.f);
 	m_scene_layers[static_cast<int>(Layers::kUpperAir)]->AttachChild(std::move(pickup));
 }
 
@@ -143,6 +144,7 @@ void World::CreatePickup(sf::Vector2f position, PickupType type, int index)
 	std::unique_ptr<Pickup> pickup(new Pickup(type, m_textures, index));
 	pickup->setPosition(position);
 	pickup->SetVelocity(0.f, 0.f);
+	pickup->setScale(2.f, 2.f);
 	m_scene_layers[static_cast<int>(Layers::kUpperAir)]->AttachChild(std::move(pickup));
 }
 
