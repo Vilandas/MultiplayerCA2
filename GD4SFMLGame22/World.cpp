@@ -318,7 +318,7 @@ void World::SpawnEnemies()
 	while(!m_enemy_spawn_points.empty() && m_enemy_spawn_points.back().m_y > GetBattlefieldBounds().top)
 	{
 		SpawnPoint spawn = m_enemy_spawn_points.back();
-		std::cout << static_cast<int>(spawn.m_type) << std::endl;
+		//std::cout << static_cast<int>(spawn.m_type) << std::endl;
 		std::unique_ptr<Aircraft> enemy(new Aircraft(spawn.m_type, m_textures, m_fonts));
 		enemy->setPosition(spawn.m_x, spawn.m_y);
 		enemy->setRotation(180.f);
@@ -636,7 +636,7 @@ void World::UpdateSounds()
 
 void World::CheckRespawn()
 {
-	std::cout << m_PickupQueue.size()<< std::endl;
+	//std::cout << m_PickupQueue.size()<< std::endl;
 
 	if (timer.getElapsedTime().asSeconds() >= 3) {
 		timer.restart();

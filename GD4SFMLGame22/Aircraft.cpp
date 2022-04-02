@@ -437,12 +437,14 @@ void Aircraft::UpdateRollAnimation()
 				m_current_walk_frame++;
 				m_sprite.setTextureRect(textureRect);
 			}
-			else if (clock.getElapsedTime().asMilliseconds() > time_since_last_frame + 750.0f)
+			else if (clock.getElapsedTime().asMilliseconds() > time_since_last_frame + 250.0f)
 			{
-				time_since_last_frame += 750.0f;
+				time_since_last_frame += 250.0f;
 				
 				textureRect.left += m_current_walk_frame * textureRect.width;
 				m_current_walk_frame++;
+				std::cout << m_current_walk_frame << std::endl;
+				//m_sprite.setTextureRect(textureRect);
 				if (m_current_walk_frame > Table[static_cast<int>(m_type)].m_walk_animation_frames - 1)
 				{
 					m_current_walk_frame = 0; 
@@ -451,7 +453,7 @@ void Aircraft::UpdateRollAnimation()
 				m_sprite.setTextureRect(textureRect);
 			}
 		}
-		m_sprite.setTextureRect(textureRect);
+		//m_sprite.setTextureRect(textureRect);
 	}
 }
 
