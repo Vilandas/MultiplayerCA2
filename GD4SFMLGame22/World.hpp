@@ -51,7 +51,7 @@ public:
 	sf::FloatRect GetViewBounds() const;
 	CommandQueue& GetCommandQueue();
 
-	Aircraft* AddAircraft(int identifier);
+	Aircraft* AddAircraft(int identifier, bool team);
 	void RemoveAircraft(int identifier);
 	void SetCurrentBattleFieldPosition(float line_y);
 	void SetWorldHeight(float height);
@@ -135,5 +135,6 @@ private:
 	sf::Vector2f m_position5;
 
 	std::queue<int> m_PickupQueue;
+
 };
 

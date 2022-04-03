@@ -52,7 +52,7 @@ private:
 	void UpdateCurrent(sf::Time dt, CommandQueue& commands) override;
 	
 	void CheckProjectileLaunch(sf::Time dt, CommandQueue& commands);
-	bool IsAllied() const;
+	bool IsAlliedPink() const;
 	void CreatePickup(SceneNode& node, const TextureHolder& textures) const;
 	void CheckPickupDrop(CommandQueue& commands);
 	void UpdateRollAnimation();
@@ -97,5 +97,5 @@ private:
 
 	int m_current_walk_frame = 0;
 	int m_current_shoot_frame = 0;
-	bool m_TeamPink = true;
+	bool m_TeamPink ;
 };

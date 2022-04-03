@@ -119,15 +119,30 @@ void World::RemoveAircraft(int identifier)
 	}
 }
 
-Aircraft* World::AddAircraft(int identifier)
+Aircraft* World::AddAircraft(int identifier, bool team)
 {
-	std::unique_ptr<Aircraft> player(new Aircraft(AircraftType::kTeamPink, m_textures, m_fonts));
-	player->setPosition(m_camera.getCenter());
-	player->SetIdentifier(identifier);
-	//player->setScale(sf::Vector2f(3, 3));
-	m_player_aircraft.emplace_back(player.get());
-	m_scene_layers[static_cast<int>(Layers::kUpperAir)]->AttachChild(std::move(player));
-	return m_player_aircraft.back();
+	if (team) 
+	{
+		std::unique_ptr<Aircraft> player(new Aircraft(AircraftType::kTeamPink, m_textures, m_fonts));
+		player->setPosition(m_camera.getCenter());
+		player->SetIdentifier(identifier);
+		player->setScale(sf::Vector2f(3, 3));
+		player->SetTeamPink(team);
+		m_player_aircraft.emplace_back(player.get());
+		m_scene_layers[static_cast<int>(Layers::kUpperAir)]->AttachChild(std::move(player));
+		return m_player_aircraft.back();
+	}
+	else 
+	{
+		std::unique_ptr<Aircraft> player(new Aircraft(AircraftType::kTeamBlue, m_textures, m_fonts));
+		player->setPosition(m_camera.getCenter());
+		player->SetIdentifier(identifier);
+		player->setScale(sf::Vector2f(-3, 3));
+		player->SetTeamPink(team);
+		m_player_aircraft.emplace_back(player.get());
+		m_scene_layers[static_cast<int>(Layers::kUpperAir)]->AttachChild(std::move(player));
+		return m_player_aircraft.back();
+	}
 }
 
 void World::CreatePickup(sf::Vector2f position, PickupType type)
@@ -166,7 +181,7 @@ void World::SetWorldHeight(float height)
 
 bool World::HasAlivePlayer() const
 {
-	return !m_player_aircraft.empty();
+	return true;// !m_player_aircraft.empty();
 }
 
 bool World::HasPlayerReachedEnd() const
@@ -253,11 +268,13 @@ CommandQueue& World::GetCommandQueue()
 
 void World::AdaptPlayerPosition()
 {
+	
 	//Keep all players on the screen, at least border_distance from the border
 	sf::FloatRect view_bounds = GetViewBounds();
 	const float border_distance = 40.f;
 	for (Aircraft* aircraft : m_player_aircraft)
 	{
+		
 		sf::Vector2f position = aircraft->getPosition();
 		position.x = std::max(position.x, view_bounds.left + border_distance);
 		position.x = std::min(position.x, view_bounds.left + view_bounds.width - border_distance);
@@ -431,40 +448,6 @@ void World::RespawnBalls(int index) {
 void World::AddEnemies()
 {
 
-
-	if(m_networked_world)
-	{
-		return;
-	}
-	//Add all enemies
-	AddEnemy(AircraftType::kRaptor, 0.f, 500.f);
-	AddEnemy(AircraftType::kRaptor, 0.f, 1000.f);
-	AddEnemy(AircraftType::kRaptor, +100.f, 1150.f);
-	AddEnemy(AircraftType::kRaptor, -100.f, 1150.f);
-	AddEnemy(AircraftType::kAvenger, 70.f, 1500.f);
-	AddEnemy(AircraftType::kAvenger, -70.f, 1500.f);
-	AddEnemy(AircraftType::kAvenger, -70.f, 1710.f);
-	AddEnemy(AircraftType::kAvenger, 70.f, 1700.f);
-	AddEnemy(AircraftType::kAvenger, 30.f, 1850.f);
-	AddEnemy(AircraftType::kRaptor, 300.f, 2200.f);
-	AddEnemy(AircraftType::kRaptor, -300.f, 2200.f);
-	AddEnemy(AircraftType::kRaptor, 0.f, 2200.f);
-	AddEnemy(AircraftType::kRaptor, 0.f, 2500.f);
-	AddEnemy(AircraftType::kAvenger, -300.f, 2700.f);
-	AddEnemy(AircraftType::kAvenger, -300.f, 2700.f);
-	AddEnemy(AircraftType::kRaptor, 0.f, 3000.f);
-	AddEnemy(AircraftType::kRaptor, 250.f, 3250.f);
-	AddEnemy(AircraftType::kRaptor, -250.f, 3250.f);
-	AddEnemy(AircraftType::kAvenger, 0.f, 3500.f);
-	AddEnemy(AircraftType::kAvenger, 0.f, 3700.f);
-	AddEnemy(AircraftType::kRaptor, 0.f, 3800.f);
-	AddEnemy(AircraftType::kAvenger, 0.f, 4000.f);
-	AddEnemy(AircraftType::kAvenger, -200.f, 4200.f);
-	AddEnemy(AircraftType::kRaptor, 200.f, 4200.f);
-	AddEnemy(AircraftType::kRaptor, 0.f, 4400.f);
-
-	//Sort according to y value so that lower enemies are checked first
-	SortEnemies();
 }
 
 void World::SortEnemies()
@@ -556,6 +539,17 @@ void World::HandleCollisions()
 			enemy.Destroy();
 		}
 
+		if (MatchesCategories(pair, Category::Type::kPlayerAircraft, Category::Type::kPlayerAircraft))
+		{
+			auto& player = static_cast<Aircraft&>(*pair.first);
+			auto& enemy = static_cast<Aircraft&>(*pair.second);
+				if (player.GetTeamPink() != enemy.GetTeamPink()) 
+				{
+					player.Damage(enemy.GetHitPoints());
+					enemy.Destroy();
+				}
+		}
+
 		else if (MatchesCategories(pair, Category::Type::kPlayerAircraft, Category::Type::kPickup))
 		{
 			auto& player = static_cast<Aircraft&>(*pair.first);
@@ -578,16 +572,16 @@ void World::HandleCollisions()
 			}
 		}
 
-		else if (MatchesCategories(pair, Category::Type::kPlayerAircraft, Category::Type::kEnemyProjectile) || MatchesCategories(pair, Category::Type::kEnemyAircraft, Category::Type::kAlliedProjectile))
+		else if (MatchesCategories(pair, Category::Type::kPlayerAircraft, Category::Type::kEnemyProjectile) || MatchesCategories(pair, Category::Type::kPlayerAircraft, Category::Type::kAlliedProjectile))
 		{
 			auto& aircraft = static_cast<Aircraft&>(*pair.first);
 			auto& projectile = static_cast<Projectile&>(*pair.second);
-			//Apply the projectile damage to the plane
-			aircraft.Damage(projectile.GetDamage());
-			projectile.Destroy();
+			if (aircraft.GetTeamPink() && projectile.GetCategory() == Category::Type::kEnemyProjectile || !aircraft.GetTeamPink() && projectile.GetCategory() == Category::Type::kAlliedProjectile) 
+			{
+				aircraft.Damage(projectile.GetDamage());
+				projectile.Destroy();
+			}
 		}
-
-
 	}
 }
 

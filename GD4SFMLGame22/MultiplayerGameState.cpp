@@ -130,15 +130,6 @@ bool MultiplayerGameState::Update(sf::Time dt)
 		bool found_local_plane = false;
 		for(auto itr = m_players.begin(); itr != m_players.end();)
 		{
-			//Check if there are no more local planes for remote clients
-			if(std::find(m_local_player_identifiers.begin(), m_local_player_identifiers.end(), itr->first) != m_local_player_identifiers.end())
-			{
-				found_local_plane = true;
-				//itr->first.get()->GetMissionStatus;
-
-				m_world.GetAircraft(itr->first)->UpdateTexts();
-			}
-
 			if(!m_world.GetAircraft(itr->first))
 			{
 				itr = m_players.erase(itr);
@@ -151,8 +142,17 @@ bool MultiplayerGameState::Update(sf::Time dt)
 			}
 			else
 			{
+				if(std::find(m_local_player_identifiers.begin(), m_local_player_identifiers.end(), itr->first) != m_local_player_identifiers.end())
+			{
+				found_local_plane = true;
+				//itr->first.get()->GetMissionStatus;
+
+				m_world.GetAircraft(itr->first)->UpdateTexts();
+			}
 				++itr;
 			}
+			//Check if there are no more local planes for remote clients
+			
 		}
 
 		if(!found_local_plane && m_game_started)
@@ -365,9 +365,9 @@ void MultiplayerGameState::HandlePacket(sf::Int32 packet_type, sf::Packet& packe
 		sf::Vector2f aircraft_position;
 		bool TeamPink;
 		packet >> aircraft_identifier >> aircraft_position.x >> aircraft_position.y >> TeamPink;
-		Aircraft* aircraft = m_world.AddAircraft(aircraft_identifier);
+		Aircraft* aircraft = m_world.AddAircraft(aircraft_identifier, TeamPink);
 		aircraft->setPosition(aircraft_position);
-		aircraft->SetTeamPink(TeamPink);
+		//aircraft->SetTeamPink(TeamPink);
 		m_players[aircraft_identifier].reset(new Player(&m_socket, aircraft_identifier, GetContext().keys1));
 		m_local_player_identifiers.push_back(aircraft_identifier);
 		m_game_started = true;
@@ -381,9 +381,9 @@ void MultiplayerGameState::HandlePacket(sf::Int32 packet_type, sf::Packet& packe
 		bool TeamPink;
 		packet >> aircraft_identifier >> aircraft_position.x >> aircraft_position.y >> TeamPink;
 
-		Aircraft* aircraft = m_world.AddAircraft(aircraft_identifier);
+		Aircraft* aircraft = m_world.AddAircraft(aircraft_identifier, TeamPink);
 		aircraft->setPosition(aircraft_position);
-		aircraft->SetTeamPink(TeamPink);
+		//aircraft->SetTeamPink(TeamPink);
 		m_players[aircraft_identifier].reset(new Player(&m_socket, aircraft_identifier, nullptr));
 	}
 	break;
@@ -416,11 +416,12 @@ void MultiplayerGameState::HandlePacket(sf::Int32 packet_type, sf::Packet& packe
 			bool TeamPink;
 			packet >> aircraft_identifier >> aircraft_position.x >> aircraft_position.y >> hitpoints >> missile_ammo >> TeamPink;
 
-			Aircraft* aircraft = m_world.AddAircraft(aircraft_identifier);
+			Aircraft* aircraft = m_world.AddAircraft(aircraft_identifier, TeamPink);
 			aircraft->setPosition(aircraft_position);
 			aircraft->SetHitpoints(hitpoints);
 			aircraft->SetMissileAmmo(missile_ammo);
-			aircraft->SetTeamPink(TeamPink);
+			//aircraft->SetTeamPink(TeamPink);
+			//aircraft->SetTeamPink(aircraft->GetTeamPink());
 
 			m_players[aircraft_identifier].reset(new Player(&m_socket, aircraft_identifier, nullptr));
 		}
@@ -432,7 +433,7 @@ void MultiplayerGameState::HandlePacket(sf::Int32 packet_type, sf::Packet& packe
 		sf::Int32 aircraft_identifier;
 		packet >> aircraft_identifier;
 
-		m_world.AddAircraft(aircraft_identifier);
+		//m_world.AddAircraft(aircraft_identifier);
 		m_players[aircraft_identifier].reset(new Player(&m_socket, aircraft_identifier, GetContext().keys2));
 		m_local_player_identifiers.emplace_back(aircraft_identifier);
 	}

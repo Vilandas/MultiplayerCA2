@@ -506,7 +506,6 @@ void GameServer::HandleDisconnections()
 				SendToAll((sf::Packet() << static_cast<sf::Int32>(Server::PacketType::PlayerDisconnect) << identifer));
 				m_aircraft_info.erase(identifer);
 			}
-
 			m_connected_players--;
 			m_aircraft_count -= (*itr)->m_aircraft_identifiers.size();
 
@@ -518,17 +517,13 @@ void GameServer::HandleDisconnections()
 				m_peers.emplace_back(PeerPtr(new RemotePeer()));
 				SetListening(true);
 			}
-
 			BroadcastMessage("A player has disconnected");
-
 		}
 		else
 		{
 			++itr;
 		}
 	}
-
-	
 }
 
 void GameServer::InformWorldState(sf::TcpSocket& socket)

@@ -90,14 +90,9 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 	}
 
 	//UpdateTexts();
-	if (m_TeamPink) 
-	{
-		setScale(-3, 3);
-	}
-	else
-	{ 
-		setScale(3, 3); 
-	}
+	//if (m_TeamPink) { setScale(3, 3); }
+	//else { setScale(3,3); }
+
 }
 
 int Aircraft::GetMissileAmmo() const
@@ -130,11 +125,9 @@ void Aircraft::DisablePickups()
 
 unsigned int Aircraft::GetCategory() const
 {
-	if (IsAllied())
-	{
+
 		return static_cast<int>(Category::kPlayerAircraft);
-	}
-	return static_cast<int>(Category::kEnemyAircraft);
+
 }
 
 void Aircraft::IncreaseFireRate()
@@ -178,8 +171,11 @@ void Aircraft::UpdateTexts()
 	}
 	m_health_display->setPosition(0.f, 50.f);
 	m_health_display->setRotation(-getRotation());
-
-	if(m_missile_display)
+	if (!m_TeamPink) 
+	{
+		m_health_display->setScale(-1, 1);
+	}
+	/*if(m_missile_display)
 	{
 		if(m_missile_ammo == 0)
 		{
@@ -189,7 +185,7 @@ void Aircraft::UpdateTexts()
 		{
 			m_missile_display->SetString("M: " + std::to_string(m_missile_ammo));
 		}
-	}
+	}*/
 
 }
 
@@ -211,7 +207,7 @@ void Aircraft::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 			PlayLocalSound(commands, soundEffect);
 
 			//Emit network game action for enemy explodes
-			if(!IsAllied())
+			if(!IsAlliedPink())
 			{
 				sf::Vector2f position = GetWorldPosition();
 
@@ -297,8 +293,9 @@ void Aircraft::LaunchMissile()
 
 void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 {
+	//std::cout << "Person form team " << m_TeamPink << " Throwing" << std::endl;
 	//Enemies try and fire as often as possible
-	if(!IsAllied())
+	if(!IsAlliedPink())
 	{
 		Fire();
 	}
@@ -306,7 +303,7 @@ void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 	//Rate the bullets - default to 2 times a second
 	if(m_is_firing && m_fire_countdown <= sf::Time::Zero)
 	{
-		PlayLocalSound(commands, IsAllied() ? SoundEffect::kAlliedGunfire : SoundEffect::kEnemyGunfire);
+		PlayLocalSound(commands, IsAlliedPink() ? SoundEffect::kAlliedGunfire : SoundEffect::kEnemyGunfire);
 		commands.Push(m_fire_command);
 		m_fire_countdown += Table[static_cast<int>(m_type)].m_fire_interval / (m_fire_rate + 1.f);
 		m_is_firing = false;
@@ -316,7 +313,7 @@ void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 		//Wait, can't fire yet
 		m_fire_countdown -= dt;
 		m_is_firing = false;
-		std::cout << "Ball Gone " << std::endl;
+		//std::cout << "Ball Gone " << std::endl;
 		m_has_ball = false;
 	}
 	//Missile launch
@@ -328,29 +325,17 @@ void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 	}
 }
 
-bool Aircraft::IsAllied() const
+bool Aircraft::IsAlliedPink() const
 {
-	if (m_TeamPink)
-	{
-		return m_type == AircraftType::kTeamPink;
-	}
-	else
-		return m_type == AircraftType::kTeamBlue;
+	return m_type == AircraftType::kTeamPink;
 }
 
 
 //TODO Do enemies need a different offset as they are flying down the screen?
 void Aircraft::CreateBullets(SceneNode& node, const TextureHolder& textures) const
 {
-
-
-	ProjectileType type = IsAllied() ? ProjectileType::kAlliedBullet : ProjectileType::kEnemyBullet;
-
+	ProjectileType type = IsAlliedPink() ? ProjectileType::kAlliedBullet : ProjectileType::kEnemyBullet;
 	if (m_has_ball == true) {
-
-
-
-
 		switch (m_spread_level)
 		{
 		case 1:
@@ -389,7 +374,7 @@ void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_of
 	}
 
 
-	float sign = IsAllied() ? -1.f : +1.f;
+	float sign = IsAlliedPink() ? -1.f : +1.f;
 	projectile->setPosition(GetWorldPosition() + offset * sign);
 	projectile->SetVelocity(velocity * sign);
 	projectile->setScale(2.f, 2.f);
@@ -416,20 +401,20 @@ void Aircraft::Remove()
 
 void Aircraft::CheckPickupDrop(CommandQueue& commands)
 {
-	if(!IsAllied() && Utility::RandomInt(3) == 0 && !m_spawned_pickup)
+	/*if(!IsAlliedPink() && Utility::RandomInt(3) == 0 && !m_spawned_pickup)
 	{
 		commands.Push(m_drop_pickup_command);
 	}
-	m_spawned_pickup = true;
+	m_spawned_pickup = true;*/
 }
 
 void Aircraft::CreatePickup(SceneNode& node, const TextureHolder& textures) const
 {
-	auto type = static_cast<PickupType>(Utility::RandomInt(static_cast<int>(PickupType::kPickupCount)));
+	/*auto type = static_cast<PickupType>(Utility::RandomInt(static_cast<int>(PickupType::kPickupCount)));
 	std::unique_ptr<Pickup> pickup(new Pickup(type, textures));
 	pickup->setPosition(GetWorldPosition());
 	pickup->SetVelocity(0.f, 0.f);
-	node.AttachChild(std::move(pickup));
+	node.AttachChild(std::move(pickup));*/
 }
 
 

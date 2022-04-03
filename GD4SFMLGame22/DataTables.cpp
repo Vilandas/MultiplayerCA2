@@ -66,8 +66,8 @@ std::vector<ProjectileData> InitializeProjectileData()
 	data[static_cast<int>(ProjectileType::kAlliedBullet)].m_texture = Textures::kEntities;
 	data[static_cast<int>(ProjectileType::kAlliedBullet)].m_texture_rect = sf::IntRect(155, 32, 16, 16);
 
-	data[static_cast<int>(ProjectileType::kEnemyBullet)].m_damage = 10;
-	data[static_cast<int>(ProjectileType::kEnemyBullet)].m_speed = 300;
+	data[static_cast<int>(ProjectileType::kEnemyBullet)].m_damage = 1000;
+	data[static_cast<int>(ProjectileType::kEnemyBullet)].m_speed = 600;
 	data[static_cast<int>(ProjectileType::kEnemyBullet)].m_texture = Textures::kEntities;
 	data[static_cast<int>(ProjectileType::kEnemyBullet)].m_texture_rect = sf::IntRect(155, 32, 16, 16);
 
