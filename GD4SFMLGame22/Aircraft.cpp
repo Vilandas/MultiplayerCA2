@@ -295,10 +295,10 @@ void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 {
 	//std::cout << "Person form team " << m_TeamPink << " Throwing" << std::endl;
 	//Enemies try and fire as often as possible
-	if(!IsAlliedPink())
-	{
-		Fire();
-	}
+	//if(!IsAlliedPink())
+	//{
+	//	Fire();
+	//}
 
 	//Rate the bullets - default to 2 times a second
 	if(m_is_firing && m_fire_countdown <= sf::Time::Zero)
@@ -363,16 +363,12 @@ void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_of
 	std::unique_ptr<Projectile> projectile(new Projectile(type, textures));
 	sf::Vector2f offset(x_offset * m_sprite.getGlobalBounds().width, y_offset * m_sprite.getGlobalBounds().height);
 	//for left side team
-	
 
-	
 	sf::Vector2f velocity(-projectile->GetMaxSpeed() * 0.8, 0);
-
 
 	if (type == ProjectileType::kEnemyBullet) {
 		sf::Vector2f velocity(projectile->GetMaxSpeed() * 0.8, 0);
 	}
-
 
 	float sign = IsAlliedPink() ? -1.f : +1.f;
 	projectile->setPosition(GetWorldPosition() + offset * sign);
@@ -380,7 +376,6 @@ void Aircraft::CreateProjectile(SceneNode& node, ProjectileType type, float x_of
 	projectile->setScale(2.f, 2.f);
 	node.AttachChild(std::move(projectile));
 
-	
 }
 
 sf::FloatRect Aircraft::GetBoundingRect() const
