@@ -114,6 +114,6 @@ void Application::RegisterStates()
 	m_stack.RegisterState<PauseState>(StateID::kPause);
 	m_stack.RegisterState<PauseState>(StateID::kNetworkPause, true);
 	m_stack.RegisterState<SettingsState>(StateID::kSettings);
-	m_stack.RegisterState<GameOverState>(StateID::kGameOver, "Mission Failed!");
-	m_stack.RegisterState<GameOverState>(StateID::kMissionSuccess, "Mission Successful!");
+	m_stack.RegisterState<GameOverState>(StateID::kGameOver, "You Lost!");
+	m_stack.RegisterState<GameOverState>(StateID::kMissionSuccess, "You Won");
 }

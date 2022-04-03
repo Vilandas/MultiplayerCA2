@@ -28,13 +28,13 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 : Entity(Table[static_cast<int>(type)].m_hitpoints)
 , m_type(type)
 , m_sprite(textures.Get(Table[static_cast<int>(type)].m_texture), Table[static_cast<int>(type)].m_walk_texture_rect)
-, m_explosion(textures.Get(Textures::kExplosion))
+, m_splatter(textures.Get(Textures::kSplatter))
 , m_is_firing(false)
 , m_is_launching_missile(false)
 , m_fire_countdown(sf::Time::Zero)
 , m_is_marked_for_removal(false)
-, m_show_explosion(true)
-, m_explosion_began(false)
+, m_show_Splatter(true)
+, m_splatter_began(false)
 , m_spawned_pickup(false)
 , m_pickups_enabled(true)
 , m_fire_rate(1)
@@ -48,16 +48,16 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 , m_identifier(0)
 , m_TeamPink(true)
 {
-	m_explosion.SetFrameSize(sf::Vector2i(256, 256));
-	m_explosion.SetNumFrames(16);
-	m_explosion.SetDuration(sf::seconds(1));
+	m_splatter.SetFrameSize(sf::Vector2i(100, 100));
+	m_splatter.SetNumFrames(14);
+	m_splatter.SetDuration(sf::seconds(1));
 	
 	m_current_walk_frame = 0;
 	m_current_shoot_frame = 0;
 
 
 	Utility::CentreOrigin(m_sprite);
-	Utility::CentreOrigin(m_explosion);
+	Utility::CentreOrigin(m_splatter);
 
 	m_fire_command.category = static_cast<int>(Category::Type::kScene);
 	m_fire_command.action = [this, &textures](SceneNode& node, sf::Time)
@@ -107,9 +107,9 @@ void Aircraft::SetMissileAmmo(int ammo)
 
 void Aircraft::DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	if(IsDestroyed() && m_show_explosion)
+	if(IsDestroyed() && m_show_Splatter)
 	{
-		target.draw(m_explosion, states);
+		target.draw(m_splatter, states);
 	}
 	else
 	{
@@ -198,12 +198,12 @@ void Aircraft::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 	if(IsDestroyed())
 	{
 		//CheckPickupDrop(commands);
-		m_explosion.Update(dt);
+		m_splatter.Update(dt);
 
-		// Play explosion sound only once
-		if (!m_explosion_began)
+		// Play Splatter sound only once
+		if (!m_splatter_began)
 		{
-			SoundEffect soundEffect = (Utility::RandomInt(2) == 0) ? SoundEffect::kExplosion1 : SoundEffect::kExplosion2;
+			SoundEffect soundEffect = (Utility::RandomInt(2) == 0) ? SoundEffect::kSplatter1 : SoundEffect::kSplatter2;
 			PlayLocalSound(commands, soundEffect);
 
 			//Emit network game action for enemy explodes
@@ -221,7 +221,7 @@ void Aircraft::UpdateCurrent(sf::Time dt, CommandQueue& commands)
 				commands.Push(command);
 			}
 
-			m_explosion_began = true;
+			m_splatter_began = true;
 		}
 		return;
 	}
@@ -385,13 +385,13 @@ sf::FloatRect Aircraft::GetBoundingRect() const
 
 bool Aircraft::IsMarkedForRemoval() const
 {
-	return IsDestroyed() && (m_explosion.IsFinished() || !m_show_explosion);
+	return IsDestroyed() && (m_splatter.IsFinished() || !m_show_Splatter);
 }
 
 void Aircraft::Remove()
 {
 	Entity::Remove();
-	m_show_explosion = false;
+	m_show_Splatter = false;
 }
 
 void Aircraft::CheckPickupDrop(CommandQueue& commands)

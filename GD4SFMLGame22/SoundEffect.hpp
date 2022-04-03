@@ -3,8 +3,8 @@ enum class SoundEffect
 {
 	kAlliedGunfire,
 	kEnemyGunfire,
-	kExplosion1,
-	kExplosion2,
+	kSplatter1,
+	kSplatter2,
 	kLaunchMissile,
 	kCollectPickup,
 	kButton

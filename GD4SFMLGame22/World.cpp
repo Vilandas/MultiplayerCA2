@@ -197,7 +197,7 @@ void World::LoadTextures()
 {
 	m_textures.Load(Textures::kEntities, "Media/Textures/Dodgeball_Spritesheet.png");
 	m_textures.Load(Textures::KCourt, "Media/Textures/court.png");
-	m_textures.Load(Textures::kExplosion, "Media/Textures/Explosion.png");
+	m_textures.Load(Textures::kSplatter, "Media/Textures/Splatter.png");
 	m_textures.Load(Textures::kParticle, "Media/Textures/Particle.png");
 	m_textures.Load(Textures::kFinishLine, "Media/Textures/FinishLine.png");
 }

@@ -20,8 +20,8 @@ SoundPlayer::SoundPlayer()
 {
 	m_sound_buffers.Load(SoundEffect::kAlliedGunfire, "Media/Sound/Throw.ogg");
 	m_sound_buffers.Load(SoundEffect::kEnemyGunfire, "Media/Sound/Throw.ogg");
-	m_sound_buffers.Load(SoundEffect::kExplosion1, "Media/Sound/Explosion1.wav");
-	m_sound_buffers.Load(SoundEffect::kExplosion2, "Media/Sound/Explosion2.wav");
+	m_sound_buffers.Load(SoundEffect::kSplatter1, "Media/Sound/Death.ogg");
+	m_sound_buffers.Load(SoundEffect::kSplatter2, "Media/Sound/Death.ogg");
 	m_sound_buffers.Load(SoundEffect::kLaunchMissile, "Media/Sound/LaunchMissile.wav");
 	m_sound_buffers.Load(SoundEffect::kCollectPickup, "Media/Sound/Pickup.ogg");
 	m_sound_buffers.Load(SoundEffect::kButton, "Media/Sound/Button.wav");

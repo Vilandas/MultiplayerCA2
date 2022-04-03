@@ -5,7 +5,7 @@ enum class Textures
 	KCourt,
 	kTitleScreen,
 	kButtons,
-	kExplosion,
+	kSplatter,
 	kParticle,
 	kFinishLine
 };

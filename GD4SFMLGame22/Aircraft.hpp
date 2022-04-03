@@ -64,7 +64,7 @@ private:
 
 	AircraftType m_type;
 	sf::Sprite m_sprite;
-	Animation m_explosion;
+	Animation m_splatter;
 
 	Command m_fire_command;
 	Command m_missile_command;
@@ -77,8 +77,8 @@ private:
 	sf::Time m_fire_countdown;
 
 	bool m_is_marked_for_removal;
-	bool m_show_explosion;
-	bool m_explosion_began;
+	bool m_show_Splatter;
+	bool m_splatter_began;
 	bool m_spawned_pickup;
 	bool m_pickups_enabled;
 
