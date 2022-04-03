@@ -124,7 +124,7 @@ Aircraft* World::AddAircraft(int identifier)
 	std::unique_ptr<Aircraft> player(new Aircraft(AircraftType::kTeamPink, m_textures, m_fonts));
 	player->setPosition(m_camera.getCenter());
 	player->SetIdentifier(identifier);
-	player->setScale(sf::Vector2f(3, 3));
+	//player->setScale(sf::Vector2f(3, 3));
 	m_player_aircraft.emplace_back(player.get());
 	m_scene_layers[static_cast<int>(Layers::kUpperAir)]->AttachChild(std::move(player));
 	return m_player_aircraft.back();

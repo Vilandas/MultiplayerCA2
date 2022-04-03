@@ -90,7 +90,14 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 	}
 
 	//UpdateTexts();
-
+	if (m_TeamPink) 
+	{
+		setScale(-3, 3);
+	}
+	else
+	{ 
+		setScale(3, 3); 
+	}
 }
 
 int Aircraft::GetMissileAmmo() const
@@ -323,7 +330,12 @@ void Aircraft::CheckProjectileLaunch(sf::Time dt, CommandQueue& commands)
 
 bool Aircraft::IsAllied() const
 {
-	return m_type == AircraftType::kTeamPink;
+	if (m_TeamPink)
+	{
+		return m_type == AircraftType::kTeamPink;
+	}
+	else
+		return m_type == AircraftType::kTeamBlue;
 }
 
 
