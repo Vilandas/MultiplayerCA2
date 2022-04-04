@@ -534,20 +534,20 @@ void World::HandleCollisions()
 		{
 			auto& player = static_cast<Aircraft&>(*pair.first);
 			auto& enemy = static_cast<Aircraft&>(*pair.second);
-			//Collision
-			player.Damage(enemy.GetHitPoints());
-			enemy.Destroy();
+			////Collision
+			//player.Damage(enemy.GetHitPoints());
+			//enemy.Destroy();
 		}
 
 		if (MatchesCategories(pair, Category::Type::kPlayerAircraft, Category::Type::kPlayerAircraft))
 		{
 			auto& player = static_cast<Aircraft&>(*pair.first);
 			auto& enemy = static_cast<Aircraft&>(*pair.second);
-				if (player.GetTeamPink() != enemy.GetTeamPink()) 
-				{
-					player.Damage(enemy.GetHitPoints());
-					enemy.Destroy();
-				}
+				//if (player.GetTeamPink() != enemy.GetTeamPink()) 
+				//{
+				//	player.Damage(enemy.GetHitPoints());
+				//	enemy.Destroy();
+				//}
 		}
 
 		else if (MatchesCategories(pair, Category::Type::kPlayerAircraft, Category::Type::kPickup))

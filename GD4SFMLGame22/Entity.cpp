@@ -59,7 +59,7 @@ void Entity::Repair(unsigned int points)
 
 void Entity::Damage(int points)
 {
-	assert(points > 0);
+	//assert(points > 0);
 	m_hitpoints -= points;
 	std::cout << "After damage: " << m_hitpoints << std::endl;
 }

@@ -425,17 +425,18 @@ void GameServer::HandleIncomingConnections()
 		packet << static_cast<sf::Int32>(Server::PacketType::SpawnSelf);
 		packet << m_aircraft_identifier_counter;
 
-		float spawn_centre = static_cast<float>(Utility::RandomInt(500) - 250);
+		float spawn_centre = static_cast<float>(Utility::RandomInt(1000) - 150);
 
 		float plane_distance = 0.f;
 		float next_spawn_position = spawn_centre;
 
-		if (m_aircraft_identifier_counter% 2 == 0) {
-			m_aircraft_info[m_aircraft_identifier_counter].m_position = sf::Vector2f(m_battlefield_rect.width / 2 + spawn_centre, m_battlefield_rect.top + m_battlefield_rect.height / 2);
+		//teams should no longer be imbalanced
+		if (m_connected_players% 2 == 0) {
+			m_aircraft_info[m_aircraft_identifier_counter].m_position = sf::Vector2f(m_battlefield_rect.width / 2 + spawn_centre,/* m_battlefield_rect.top*/ spawn_centre + m_battlefield_rect.height / 2);
 			m_aircraft_info[m_aircraft_identifier_counter].m_TeamPink = false;
 		}
 		else {
-			m_aircraft_info[m_aircraft_identifier_counter].m_position = sf::Vector2f(m_battlefield_rect.width / 2 - spawn_centre, m_battlefield_rect.top + m_battlefield_rect.height / 2);
+			m_aircraft_info[m_aircraft_identifier_counter].m_position = sf::Vector2f(m_battlefield_rect.width / 2 - spawn_centre, /*m_battlefield_rect.top*/ spawn_centre + m_battlefield_rect.height / 2);
 			m_aircraft_info[m_aircraft_identifier_counter].m_TeamPink = true;
 		}
 
