@@ -17,7 +17,6 @@
 
 
 
-
 namespace
 {
 	const std::vector<AircraftData> Table = InitializeAircraftData();
@@ -47,6 +46,7 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 , m_directions_index(0)
 , m_identifier(0)
 , m_TeamPink(true)
+, is_dead(false)
 {
 	m_splatter.SetFrameSize(sf::Vector2i(100, 100));
 	m_splatter.SetNumFrames(14);
@@ -126,8 +126,9 @@ void Aircraft::DisablePickups()
 unsigned int Aircraft::GetCategory() const
 {
 
+	if (!is_dead)
 		return static_cast<int>(Category::kPlayerAircraft);
-
+	return static_cast<int>(Category::kNone);
 }
 
 void Aircraft::IncreaseFireRate()
@@ -392,7 +393,7 @@ sf::FloatRect Aircraft::GetBoundingRect() const
 
 bool Aircraft::IsMarkedForRemoval() const
 {
-	return IsDestroyed() && (m_splatter.IsFinished() || !m_show_Splatter);
+	return false;//IsDestroyed() && (m_splatter.IsFinished() || !m_show_Splatter);
 }
 
 void Aircraft::Remove()
@@ -455,6 +456,7 @@ void Aircraft::UpdateRollAnimation()
 		//m_sprite.setTextureRect(textureRect);
 	}
 }
+
 
 void Aircraft::PlayLocalSound(CommandQueue& commands, SoundEffect effect)
 {

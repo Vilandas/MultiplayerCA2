@@ -13,6 +13,8 @@
 #include "SFML/Graphics.hpp" //needed for clock
 #include "SFML/Graphics/Sprite.hpp"
 
+#include "Layers.hpp"
+
 class Aircraft : public Entity
 {
 public:
@@ -46,6 +48,8 @@ public:
 
 	bool GetTeamPink();
 	void SetTeamPink(bool team);
+
+	
 	
 private:
 	void DrawCurrent(sf::RenderTarget& target, sf::RenderStates states) const override;
@@ -56,7 +60,6 @@ private:
 	void CreatePickup(SceneNode& node, const TextureHolder& textures) const;
 	void CheckPickupDrop(CommandQueue& commands);
 	void UpdateRollAnimation();
-
 
 private:
 	sf::Clock clock;
@@ -98,4 +101,7 @@ private:
 	int m_current_walk_frame = 0;
 	int m_current_shoot_frame = 0;
 	bool m_TeamPink ;
+
+	bool is_dead;
+
 };

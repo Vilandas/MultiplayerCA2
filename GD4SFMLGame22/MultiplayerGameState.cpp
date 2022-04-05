@@ -130,10 +130,11 @@ bool MultiplayerGameState::Update(sf::Time dt)
 		bool found_local_plane = false;
 		for(auto itr = m_players.begin(); itr != m_players.end();)
 		{
-			if(!m_world.GetAircraft(itr->first))
+			if(!m_world.GetAircraft(itr->first))//
 			{
-				itr = m_players.erase(itr);
-
+				//itr = m_players.erase(itr);
+				//itr->second->DisableAllRealtimeActions();
+				//itr->second->SetMissionStatus(MissionStatus::kMissionFailure);
 				//No more players left : Mission failed
 				if(m_players.empty())
 				{
@@ -146,13 +147,11 @@ bool MultiplayerGameState::Update(sf::Time dt)
 			{
 				found_local_plane = true;
 				//itr->first.get()->GetMissionStatus;
-
-				m_world.GetAircraft(itr->first)->UpdateTexts();
+				m_world.GetAircraft(itr->first)->UpdateTexts();//
 			}
 				++itr;
 			}
 			//Check if there are no more local planes for remote clients
-			
 		}
 
 		if(!found_local_plane && m_game_started)
@@ -230,7 +229,7 @@ bool MultiplayerGameState::Update(sf::Time dt)
 
 			for(sf::Int32 identifier : m_local_player_identifiers)
 			{
-				if(Aircraft* aircraft = m_world.GetAircraft(identifier))
+				if(Aircraft* aircraft = m_world.GetAircraft(identifier))//
 				{
 					position_update_packet << identifier << aircraft->getPosition().x << aircraft->getPosition().y << static_cast<sf::Int32>(aircraft->GetHitPoints()) << static_cast<sf::Int32>(aircraft->GetMissileAmmo());
 				}
@@ -446,7 +445,7 @@ void MultiplayerGameState::HandlePacket(sf::Int32 packet_type, sf::Packet& packe
 		sf::Int32 aircraft_identifier;
 		sf::Int32 action;
 		packet >> aircraft_identifier >> action;
-
+		
 		auto itr = m_players.find(aircraft_identifier);
 		if (itr != m_players.end())
 		{

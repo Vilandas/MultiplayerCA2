@@ -8,6 +8,8 @@
 #include "PickupType.hpp"
 #include "Utility.hpp"
 
+#include <iostream>
+
 //It is essential to set the sockets to non-blocking - m_socket.setBlocking(false)
 //otherwise the server will hang waiting to read input from a connection
 
@@ -373,7 +375,7 @@ void GameServer::HandleIncomingPacket(sf::Packet& packet, RemotePeer& receiving_
 			sf::Int32 missile_ammo;
 			sf::Vector2f aircraft_position;
 			packet >> aircraft_identifier >> aircraft_position.x >> aircraft_position.y >> aircraft_hitpoints >> missile_ammo;
-			m_aircraft_info[aircraft_identifier].m_position = aircraft_position;
+			m_aircraft_info[aircraft_identifier].m_position = aircraft_position; if (aircraft_identifier == 2) { std::cout << aircraft_position.x << "," << aircraft_position.y << std::endl; }
 			m_aircraft_info[aircraft_identifier].m_hitpoints = aircraft_hitpoints;
 			m_aircraft_info[aircraft_identifier].m_missile_ammo = missile_ammo;
 		}
@@ -431,6 +433,7 @@ void GameServer::HandleIncomingConnections()
 		float next_spawn_position = spawn_centre;
 
 		//teams should no longer be imbalanced
+	
 		if (m_connected_players% 2 == 0) {
 			m_aircraft_info[m_aircraft_identifier_counter].m_position = sf::Vector2f(m_battlefield_rect.width / 2 + spawn_centre,/* m_battlefield_rect.top*/ spawn_centre + m_battlefield_rect.height / 2);
 			m_aircraft_info[m_aircraft_identifier_counter].m_TeamPink = false;
@@ -439,32 +442,6 @@ void GameServer::HandleIncomingConnections()
 			m_aircraft_info[m_aircraft_identifier_counter].m_position = sf::Vector2f(m_battlefield_rect.width / 2 - spawn_centre, /*m_battlefield_rect.top*/ spawn_centre + m_battlefield_rect.height / 2);
 			m_aircraft_info[m_aircraft_identifier_counter].m_TeamPink = true;
 		}
-
-
-		
-
-		//If there is only one enemy it is at the spawn_centre
-
-
-		//If there are two then they are centred on the spawn centre
-		//if (enemy_count == 2)
-		//{
-		//	plane_distance = static_cast<float>(150 + Utility::RandomInt(250));
-		//	next_spawn_position = spawn_centre - plane_distance / 2.f;
-		//}
-
-
-		//		if (aircraft->GetTeamPink() == true) {
-		//	if (position.x >= (m_world_bounds.width / 2)) {
-		//		position.x = m_world_bounds.width / 2;
-		//	}
-		//}
-
-		//if (aircraft->GetTeamPink() == false) {
-		//	if (position.x <= (m_world_bounds.width / 2)) {
-		//		position.x = m_world_bounds.width / 2;
-		//	}
-		//}
 
 		packet << m_aircraft_info[m_aircraft_identifier_counter].m_position.x;
 		packet << m_aircraft_info[m_aircraft_identifier_counter].m_position.y;
@@ -577,7 +554,7 @@ void GameServer::UpdateClientState()
 {
 	sf::Packet update_client_state_packet;
 	update_client_state_packet << static_cast<sf::Int32>(Server::PacketType::UpdateClientState);
-	update_client_state_packet << static_cast<float>(m_battlefield_rect.top + m_battlefield_rect.height);
+	//update_client_state_packet << static_cast<float>(m_battlefield_rect.top + m_battlefield_rect.height);
 	update_client_state_packet << static_cast<sf::Int32>(m_aircraft_count);
 
 	for(const auto& aircraft : m_aircraft_info)
