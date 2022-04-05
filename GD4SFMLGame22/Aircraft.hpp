@@ -89,7 +89,7 @@ private:
 	unsigned int m_spread_level;
 	unsigned int m_missile_ammo;
 	TextNode* m_health_display;
-	TextNode* m_missile_display;
+	TextNode* m_ball_display;
 	float m_travelled_distance;
 	int m_directions_index;
 

@@ -42,7 +42,7 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 , m_missile_ammo(0)
 , m_has_ball(false)
 , m_health_display(nullptr)
-, m_missile_display(nullptr)
+, m_ball_display(nullptr)
 , m_travelled_distance(0.f)
 , m_directions_index(0)
 , m_identifier(0)
@@ -85,7 +85,7 @@ Aircraft::Aircraft(AircraftType type, const TextureHolder& textures, const FontH
 	{
 		std::unique_ptr<TextNode> missileDisplay(new TextNode(fonts, ""));
 		missileDisplay->setPosition(0, 70);
-		m_missile_display = missileDisplay.get();
+		m_ball_display = missileDisplay.get();
 		AttachChild(std::move(missileDisplay));
 	}
 
@@ -169,23 +169,30 @@ void Aircraft::UpdateTexts()
 	{
 		m_health_display->SetString("^");
 	}
-	m_health_display->setPosition(0.f, 50.f);
+	m_health_display->setPosition(0.f, 20.f);
 	m_health_display->setRotation(-getRotation());
 	if (!m_TeamPink) 
 	{
 		m_health_display->setScale(-1, 1);
 	}
-	/*if(m_missile_display)
+	if(m_ball_display)
 	{
-		if(m_missile_ammo == 0)
+		if(m_has_ball == true)
 		{
-			m_missile_display->SetString("");
+			m_ball_display->SetString("Ball");
+
 		}
 		else
 		{
-			m_missile_display->SetString("M: " + std::to_string(m_missile_ammo));
+			m_ball_display->SetString("");
 		}
-	}*/
+		m_ball_display->setPosition(0.f, 35.f);
+		m_ball_display->setRotation(-getRotation());
+		if (!m_TeamPink)
+		{
+			m_health_display->setScale(-1, 1);
+		}
+	}
 
 }
 
