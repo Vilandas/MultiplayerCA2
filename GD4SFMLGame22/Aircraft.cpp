@@ -190,7 +190,7 @@ void Aircraft::UpdateTexts()
 		m_ball_display->setRotation(-getRotation());
 		if (!m_TeamPink)
 		{
-			m_health_display->setScale(-1, 1);
+			m_ball_display->setScale(-1, 1);
 		}
 	}
 
