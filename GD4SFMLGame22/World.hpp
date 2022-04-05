@@ -136,5 +136,8 @@ private:
 
 	std::queue<int> m_PickupQueue;
 
+	bool gameStarted;
+
+	sf::Clock startTimer;
 };
 

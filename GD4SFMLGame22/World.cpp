@@ -24,6 +24,7 @@ World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sou
 	, m_networked_world(networked)
 	, m_network_node(nullptr)
 	, m_finish_sprite(nullptr)
+	,gameStarted(false)
 {
 	m_scene_texture.create(m_target.getSize().x, m_target.getSize().y);
 
@@ -31,8 +32,11 @@ World::World(sf::RenderTarget& output_target, FontHolder& font, SoundPlayer& sou
 	BuildScene();
 	m_camera.setCenter(m_spawn_position);
 
-
-
+	startTimer.restart();
+	for (int i = 0; i < 6; i++) 
+	{
+		m_PickupQueue.push(i);
+	}
 
 }
 
@@ -45,7 +49,11 @@ void World::Update(sf::Time dt)
 {
 	//Scroll the world
 	//m_camera.move(0, m_scrollspeed * dt.asSeconds()*m_scrollspeed_compensation);
-
+	std::cout << startTimer.getElapsedTime().asSeconds() << std::endl;
+	if (startTimer.getElapsedTime().asSeconds() >= 10.0f && !gameStarted) 
+	{ 
+		gameStarted = true;
+	}
 	for (Aircraft* a : m_player_aircraft)
 	{
 		a->SetVelocity(0.f, 0.f);
@@ -256,7 +264,7 @@ void World::BuildScene()
 	//m_spawn_position.x - 500;
 	AddEnemies();
 
-	AddBalls();
+	//AddBalls();
 
 	
 }
@@ -630,7 +638,8 @@ void World::UpdateSounds()
 
 void World::CheckRespawn()
 {
-	if (timer.getElapsedTime().asSeconds() >= 3) {
+
+	if (gameStarted && timer.getElapsedTime().asSeconds() >= 3) {
 		timer.restart();
 		//RespawnBalls()
 		while (!m_PickupQueue.empty()) {
