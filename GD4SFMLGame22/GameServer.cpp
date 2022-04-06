@@ -129,7 +129,9 @@ void GameServer::ExecutionThread()
 	sf::Time frame_time = sf::Time::Zero;
 	sf::Time tick_rate = sf::seconds(1.f / 20.f);
 	sf::Time tick_time = sf::Time::Zero;
-	sf::Clock frame_clock, tick_clock;
+	sf::Time spawn_ball_time;
+	sf::Time spawn_ball_rate = sf::seconds(15);
+	sf::Clock frame_clock, tick_clock, spawn_balls;
 
 	while(!m_waiting_thread_end)
 	{
@@ -141,6 +143,21 @@ void GameServer::ExecutionThread()
 
 		tick_time += tick_clock.getElapsedTime();
 		tick_clock.restart();
+
+		if (!m_timer_finshed) 
+		{
+			spawn_ball_time += spawn_balls.getElapsedTime();
+			spawn_balls.restart();
+			if (spawn_ball_time > spawn_ball_rate) 
+			{
+				m_timer_finshed = true;
+				sf::Packet packet;
+				packet << static_cast<sf::Int32>(Server::PacketType::StartGame);
+				SendToAll(packet);
+				//m_max_connected_players = m_connected_players;
+				SetListening(false);
+			}
+		}
 
 		//Fixed update step
 		while(frame_time >= frame_rate)

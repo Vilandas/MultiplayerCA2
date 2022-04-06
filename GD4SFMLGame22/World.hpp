@@ -70,6 +70,8 @@ public:
 	void CreatePickup(sf::Vector2f position, PickupType type, int index);
 	bool PollGameAction(GameActions::Action& out);
 
+	void StartGame();
+	bool HasGameStarted();
 
 private:
 	void LoadTextures();
@@ -136,8 +138,8 @@ private:
 
 	std::queue<int> m_PickupQueue;
 
-	bool gameStarted;
+	bool m_game_started;
 
-	sf::Clock startTimer;
+	//sf::Clock startTimer;
 };
 

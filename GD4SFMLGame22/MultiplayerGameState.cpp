@@ -124,6 +124,7 @@ bool MultiplayerGameState::Update(sf::Time dt)
 	//Connected to the Server: Handle all the network logic
 	if(m_connected)
 	{
+
 		m_world.Update(dt);
 
 		//Remove players whose aircraft were destroyed
@@ -219,7 +220,16 @@ bool MultiplayerGameState::Update(sf::Time dt)
 
 			m_socket.send(packet);
 		}
-
+		
+		////Synchronyses starting clock
+		//if (!m_world.HasGameStarted()) 
+		//{
+		//	sf::Packet packet;
+		//	packet << static_cast<sf::Int32>(Client::PacketType::GameEvent);
+		//	packet << m_start_clock.getElapsedTime().asSeconds();
+		//	
+		//}
+		//std::cout << "Time = " << dt.asSeconds() << std::endl;
 		//Regular position updates
 		if(m_tick_clock.getElapsedTime() > sf::seconds(1.f/20.f))
 		{
@@ -403,7 +413,7 @@ void MultiplayerGameState::HandlePacket(sf::Int32 packet_type, sf::Packet& packe
 		float world_height, current_scroll;
 		packet >> world_height /*>> current_scroll*/;
 
-		m_world.SetWorldHeight(world_height);
+		//m_world.SetWorldHeight(world_height);
 		//m_world.SetCurrentBattleFieldPosition(current_scroll);
 
 		packet >> aircraft_count;
@@ -498,6 +508,13 @@ void MultiplayerGameState::HandlePacket(sf::Int32 packet_type, sf::Packet& packe
 		packet >> type >> position.x >> position.y;
 		std::cout << "Spawning pickup type " << type << std::endl;
 		m_world.CreatePickup(position, static_cast<PickupType>(type));
+	}
+	break;
+
+	case Server::PacketType::StartGame:
+	{
+		m_world.StartGame();
+	
 	}
 	break;
 
