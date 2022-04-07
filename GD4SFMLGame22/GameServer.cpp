@@ -398,7 +398,7 @@ void GameServer::HandleIncomingPacket(sf::Packet& packet, RemotePeer& receiving_
 		}
 	}
 	break;
-
+	/*
 	case Client::PacketType::GameEvent:
 	{
 		sf::Int32 action;
@@ -422,6 +422,7 @@ void GameServer::HandleIncomingPacket(sf::Packet& packet, RemotePeer& receiving_
 			SendToAll(packet);
 		}
 	}
+	*/
 	}
 
 }
