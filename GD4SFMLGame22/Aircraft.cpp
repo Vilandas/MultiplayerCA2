@@ -443,7 +443,7 @@ void Aircraft::UpdateRollAnimation()
 				textureRect.left += m_current_walk_frame * textureRect.width;
 				//std::cout << textureRect.left << std::endl;
 				m_current_walk_frame++;
-				std::cout << m_current_walk_frame << std::endl;
+				//std::cout << m_current_walk_frame << std::endl;
 				//m_sprite.setTextureRect(textureRect);
 				if (m_current_walk_frame > Table[static_cast<int>(m_type)].m_walk_animation_frames - 1)
 				{

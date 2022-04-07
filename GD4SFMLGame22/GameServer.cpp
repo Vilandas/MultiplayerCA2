@@ -130,7 +130,7 @@ void GameServer::ExecutionThread()
 	sf::Time tick_rate = sf::seconds(1.f / 20.f);
 	sf::Time tick_time = sf::Time::Zero;
 	sf::Time spawn_ball_time;
-	sf::Time spawn_ball_rate = sf::seconds(15);
+	sf::Time spawn_ball_rate = sf::seconds(60);
 	sf::Clock frame_clock, tick_clock, spawn_balls;
 
 	while(!m_waiting_thread_end)
@@ -392,7 +392,7 @@ void GameServer::HandleIncomingPacket(sf::Packet& packet, RemotePeer& receiving_
 			sf::Int32 missile_ammo;
 			sf::Vector2f aircraft_position;
 			packet >> aircraft_identifier >> aircraft_position.x >> aircraft_position.y >> aircraft_hitpoints >> missile_ammo;
-			m_aircraft_info[aircraft_identifier].m_position = aircraft_position; if (aircraft_identifier == 2) { std::cout << aircraft_position.x << "," << aircraft_position.y << std::endl; }
+			m_aircraft_info[aircraft_identifier].m_position = aircraft_position; //if (aircraft_identifier == 2) { std::cout << aircraft_position.x << "," << aircraft_position.y << std::endl; }
 			m_aircraft_info[aircraft_identifier].m_hitpoints = aircraft_hitpoints;
 			m_aircraft_info[aircraft_identifier].m_missile_ammo = missile_ammo;
 		}

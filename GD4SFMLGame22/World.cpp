@@ -578,7 +578,7 @@ void World::HandleCollisions()
 				pickup->Destroy();
 				player.PlayLocalSound(m_command_queue, SoundEffect::kCollectPickup);
 				player.PickUpBall();
-				std::cout << "Player has ball =" << player.HasBall() << std::endl;
+				//std::cout << "Player has ball =" << player.HasBall() << std::endl;
 
 				//RespawnBalls(pickup.GetIndex());
 

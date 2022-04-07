@@ -61,7 +61,7 @@ void Entity::Damage(int points)
 {
 	//assert(points > 0);
 	m_hitpoints -= points;
-	std::cout << "After damage: " << m_hitpoints << std::endl;
+	//std::cout << "After damage: " << m_hitpoints << std::endl;
 }
 
 void Entity::Destroy()
